@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  /* One family, two personalities — Archivo across its width axis. */
+  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", sans-serif;
+
+  /* Identity — carried over from the original brand. */
+  --color-brand-50: #f1f4ff;
+  --color-brand-100: #dde4ff;
+  --color-brand-400: #7b95ff;
+  --color-brand-500: #5174ff;
+  --color-brand-600: #4353ff;
+  --color-brand-700: #3742d6;
+
+  /* Ink carries authority; one section is drenched in it. */
+  --color-ink: #0b0b0f;
+  --color-ink-soft: #16171d;
+  --color-ink-muted: #4a4e5a;
+  --color-surface: #f7f7f7;
+  --color-surface-alt: #f1f1f7;
+  --color-line: #e6e6ec;
+
+  --radius-pill: 120px;
+  --radius-card: 18px;
+  --radius-panel: 28px;
+
+  /* Semantic layer order — no arbitrary 9999s. */
+  --z-sticky: 40;
+  --z-dropdown: 50;
+  --z-backdrop: 60;
+  --z-modal: 70;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    /*
+     * `clip`, not `hidden`: hidden would make body a scroll container and
+     * break the sticky header. Needed because the chat launcher pulse
+     * rings scale past the right edge on narrow screens.
+     */
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8;
+  }
+
+  /*
+   * Display type: same family, pushed wide and heavy. Structural and a little
+   * industrial — signage, not brochure.
+   */
+  .type-display {
+    font-variation-settings: "wdth" 118, "wght" 760;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+
+  .type-title {
+    font-variation-settings: "wdth" 112, "wght" 700;
+    letter-spacing: -0.028em;
+    line-height: 1.06;
+  }
+
+  .type-lead {
+    font-variation-settings: "wdth" 100, "wght" 420;
+    line-height: 1.6;
+  }
+
+  /* Brand kicker. Used sparingly — never as an kicker on every section. */
+  .kicker {
+    @apply inline-flex items-center gap-2 text-[13px] uppercase text-brand-600;
+    font-variation-settings: "wdth" 105, "wght" 700;
+    letter-spacing: 0.1em;
+  }
+
+  .prose-measure {
+    max-width: 68ch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Chat launcher attention ring. Two staggered rings read as a heartbeat
+   rather than a strobe. Suppressed entirely for reduced-motion users. */
+@keyframes chat-ping {
+  0%   { transform: scale(1);    opacity: 0.5; }
+  70%  { transform: scale(1.95); opacity: 0; }
+  100% { transform: scale(1.95); opacity: 0; }
+}
+
+.chat-ring {
+  animation: chat-ping 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.chat-ring-delayed {
+  animation-delay: 0.8s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-ring { display: none; }
+}
