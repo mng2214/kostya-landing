@@ -1,7 +1,11 @@
+import { useSeo } from "@/lib/seo";
+import { seo } from "@/content";
 import { Button } from "@/components/Button";
 import { CallbackButton } from "@/components/CallbackButton";
 
 export default function NotFound() {
+  useSeo({ ...seo.notFound, noindex: true });
+
   return (
     <section className="container-page flex min-h-[60vh] flex-col items-center justify-center py-24 text-center">
       <p className="text-[96px] font-extrabold leading-none text-brand-500 sm:text-[140px]">

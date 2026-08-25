@@ -421,3 +421,127 @@ export const crisp = {
   fallbackName: "Kostya Inc support",
   fallbackStatus: "Typically replies in a few minutes",
 } as const;
+
+/* ------------------------------------------------------------------------ *
+ * SEO / AI-discovery layer
+ * ------------------------------------------------------------------------ */
+
+/**
+ * The ONE thing to change before launch. Canonical URLs, Open Graph tags,
+ * the sitemap and llms.txt all derive from it.
+ */
+export const site = {
+  url: "https://kostyainc.com", // TODO(launch): real domain
+  locale: "en_US",
+  ogImage: "/og.png",
+  twitterHandle: "", // leave empty to omit the tag entirely
+} as const;
+
+/** Real towns we cover. Used for schema.org areaServed and local search. */
+export const serviceAreaTowns = [
+  "Rolling Meadows",
+  "Arlington Heights",
+  "Palatine",
+  "Schaumburg",
+  "Mount Prospect",
+  "Hoffman Estates",
+  "Elk Grove Village",
+  "Des Plaines",
+  "Buffalo Grove",
+  "Wheeling",
+  "Prospect Heights",
+  "Inverness",
+  "Barrington",
+  "Chicago",
+] as const;
+
+/**
+ * Structured facts for schema.org. Kept separate from marketing copy so the
+ * machine-readable version and the human-readable version cannot drift.
+ */
+export const businessFacts = {
+  legalName: "Kostya Inc",
+  streetAddress: "5555 Chateau Dr",
+  addressLocality: "Rolling Meadows",
+  addressRegion: "IL",
+  postalCode: "", // TODO(real-data): ZIP
+  addressCountry: "US",
+  priceRange: "$$",
+  currenciesAccepted: "USD",
+  paymentAccepted: "Cash, Credit Card, Debit Card, Check",
+  /** Mon–Sat 07:00–20:00, plus round-the-clock emergency dispatch. */
+  openingHours: [
+    { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: "07:00", closes: "20:00" },
+  ],
+  founded: "", // TODO(real-data): year founded
+} as const;
+
+/**
+ * What actually differentiates this company. Written once, then reused by the
+ * page copy, the FAQ and llms.txt so every surface tells the same story.
+ */
+export const advantages = [
+  {
+    title: "One crew for handyman, HVAC and appliance work",
+    detail:
+      "Most homeowners juggle three contractors for these. Kostya Inc covers all three, so a furnace call that turns out to be an electrical fault does not become a second appointment with a second company.",
+  },
+  {
+    title: "Fixed written estimate before any work starts",
+    detail:
+      "The price is agreed in writing on site. No hourly creep, no revised total once the panel is open. The number you approve is the number on the invoice.",
+  },
+  {
+    title: "24/7 emergency heat and cooling",
+    detail:
+      "No-heat and no-cooling calls are dispatched around the clock, typically within four hours. In a Chicago January that is the difference between an inconvenience and burst pipes.",
+  },
+  {
+    title: "One-year warranty on labour",
+    detail:
+      "Written on the invoice, alongside the manufacturer coverage on any part we supply.",
+  },
+  {
+    title: "Diagnostic fee waived when you approve the repair",
+    detail:
+      "The $149 diagnostic is credited against the job, so a second opinion costs nothing if you go ahead.",
+  },
+  {
+    title: "Honest repair-or-replace advice",
+    detail:
+      "If replacing is cheaper than repairing over the remaining life of the unit, we say so. Talking a customer into a doomed repair costs more in referrals than it earns in labour.",
+  },
+] as const;
+
+/** Per-route metadata. Titles stay under ~60 chars, descriptions under ~155. */
+export const seo = {
+  home: {
+    title: "Handyman, HVAC & Appliance Repair — Rolling Meadows, IL",
+    description:
+      "Handyman, furnace, A/C and appliance repair across Rolling Meadows and Chicago's NW suburbs. Fixed written estimates and 24/7 emergency service.",
+  },
+  about: {
+    title: "About Kostya Inc — Local Repair Crew, Rolling Meadows",
+    description:
+      "A licensed, insured Chicago-area crew for handyman, HVAC and appliance repair. Written estimates, one-year labour warranty, on-time arrival.",
+  },
+  services: {
+    title: "Our Services — Handyman, Furnace, A/C, Appliances",
+    description:
+      "Handyman repairs, furnace and heating, air conditioning, appliance repair, electrical and plumbing — six service lines, each priced up front.",
+  },
+  packages: {
+    title: "Pricing & Service Plans — Kostya Inc",
+    description:
+      "Single visit from $149, an annual Home Care plan with seasonal HVAC tune-ups and priority dispatch, or custom coverage for property managers. No contracts.",
+  },
+  contact: {
+    title: "Contact Kostya Inc — Book a Repair in the NW Suburbs",
+    description:
+      "Call, request a callback, or send the form. We cover Rolling Meadows, Arlington Heights, Palatine, Schaumburg and the surrounding suburbs.",
+  },
+  notFound: {
+    title: "Page Not Found — Kostya Inc",
+    description: "That link is broken. Head back to the homepage or request a callback.",
+  },
+} as const;

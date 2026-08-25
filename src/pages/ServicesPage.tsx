@@ -1,3 +1,7 @@
+import { useMemo } from "react";
+import { useSeo } from "@/lib/seo";
+import { seo } from "@/content";
+import { breadcrumbSchema, faqSchema, localBusinessSchema } from "@/lib/schema";
 import { PageHero } from "@/components/PageHero";
 import { Services } from "@/sections/Services";
 import { Process } from "@/sections/Process";
@@ -8,6 +12,16 @@ import { CallbackButton } from "@/components/CallbackButton";
 import { Button } from "@/components/Button";
 
 export default function ServicesPage() {
+  const schema = useMemo(
+    () => [
+      localBusinessSchema(),
+      breadcrumbSchema([{ name: "Services", path: "/services" }]),
+      faqSchema(),
+    ],
+    [],
+  );
+  useSeo({ ...seo.services, path: "/services", schema });
+
   return (
     <>
       <PageHero

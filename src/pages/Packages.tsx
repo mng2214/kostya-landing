@@ -1,3 +1,7 @@
+import { useMemo } from "react";
+import { useSeo } from "@/lib/seo";
+import { seo } from "@/content";
+import { breadcrumbSchema, faqSchema, offerCatalogSchema } from "@/lib/schema";
 import { Check } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
@@ -9,6 +13,16 @@ import { packages } from "@/content";
 import { cn } from "@/lib/utils";
 
 export default function Packages() {
+  const schema = useMemo(
+    () => [
+      offerCatalogSchema(),
+      breadcrumbSchema([{ name: "Packages", path: "/packages" }]),
+      faqSchema(),
+    ],
+    [],
+  );
+  useSeo({ ...seo.packages, path: "/packages", schema });
+
   return (
     <>
       <PageHero

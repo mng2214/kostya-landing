@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Check } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
@@ -9,12 +10,44 @@ import { ServiceIcon } from "@/components/ServiceIcon";
 import { Eyebrow } from "@/components/Eyebrow";
 import { Process } from "@/sections/Process";
 import { FinalCta } from "@/sections/FinalCta";
-import { services } from "@/content";
+import { seo, services } from "@/content";
+import { useSeo } from "@/lib/seo";
+import { breadcrumbSchema, serviceSchema } from "@/lib/schema";
 import NotFound from "./NotFound";
 
 export default function ServiceDetail() {
   const { slug } = useParams();
   const service = services.find((s) => s.slug === slug);
+
+  /*
+   * Hooks run before the early return, and child effects fire before parent
+   * ones — so an unknown slug must set the same noindex metadata NotFound
+   * does, or this component would overwrite it a beat later.
+   */
+  const schema = useMemo(
+    () =>
+      service
+        ? [
+            serviceSchema(service),
+            breadcrumbSchema([
+              { name: "Services", path: "/services" },
+              { name: service.title, path: `/services/${service.slug}` },
+            ]),
+          ]
+        : [],
+    [service],
+  );
+
+  useSeo(
+    service
+      ? {
+          title: `${service.title} — Kostya Inc, Rolling Meadows IL`.slice(0, 65),
+          description: `${service.short} Rolling Meadows, Arlington Heights & the NW Chicago suburbs. From ${service.priceFrom}.`,
+          path: `/services/${service.slug}`,
+          schema,
+        }
+      : { ...seo.notFound, noindex: true, schema },
+  );
 
   if (!service) return <NotFound />;
 

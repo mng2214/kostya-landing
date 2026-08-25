@@ -1,3 +1,7 @@
+import { useMemo } from "react";
+import { useSeo } from "@/lib/seo";
+import { seo } from "@/content";
+import { breadcrumbSchema, faqSchema, localBusinessSchema } from "@/lib/schema";
 import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/sections/ContactForm";
 import { ContactBand } from "@/sections/ContactBand";
@@ -9,6 +13,16 @@ import { Reveal } from "@/components/Reveal";
 import { company } from "@/content";
 
 export default function Contact() {
+  const schema = useMemo(
+    () => [
+      localBusinessSchema(),
+      breadcrumbSchema([{ name: "Contact", path: "/contact" }]),
+      faqSchema(),
+    ],
+    [],
+  );
+  useSeo({ ...seo.contact, path: "/contact", schema });
+
   return (
     <>
       <PageHero

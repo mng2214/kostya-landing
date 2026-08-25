@@ -1,9 +1,8 @@
 import { motion, type Variants } from "framer-motion";
-import { Clock3, MapPin } from "lucide-react";
 import { Button } from "@/components/Button";
 import { CallbackButton } from "@/components/CallbackButton";
 import { Placeholder } from "@/components/Placeholder";
-import { company, hero } from "@/content";
+import { hero } from "@/content";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -25,25 +24,8 @@ export function Hero() {
       */}
       <div className="container-page relative grid items-center gap-12 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-24">
         <div className="relative z-10 max-w-2xl">
-          <motion.p
-            custom={0}
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-ink-muted"
-          >
-            <span className="inline-flex items-center gap-2">
-              <MapPin className="size-4 text-brand-500" aria-hidden="true" />
-              {company.serviceArea}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Clock3 className="size-4 text-brand-500" aria-hidden="true" />
-              Emergency heat &amp; cooling, 24/7
-            </span>
-          </motion.p>
-
           <motion.h1
-            custom={1}
+            custom={0}
             variants={rise}
             initial="hidden"
             animate="show"
@@ -53,14 +35,14 @@ export function Hero() {
              * Measured against the widest word pair in the headline.
              */
             style={{ fontSize: "clamp(2.5rem, 4.9vw, 4rem)" }}
-            className="type-display mt-7"
+            className="type-display"
           >
             {hero.title[0]}{" "}
             <span className="text-brand-500">{hero.title[1]}</span>
           </motion.h1>
 
           <motion.p
-            custom={2}
+            custom={1}
             variants={rise}
             initial="hidden"
             animate="show"
@@ -70,7 +52,7 @@ export function Hero() {
           </motion.p>
 
           <motion.div
-            custom={3}
+            custom={2}
             variants={rise}
             initial="hidden"
             animate="show"
