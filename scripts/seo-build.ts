@@ -217,9 +217,21 @@ for (const r of routes) {
   let html = base;
 
   // Strip the build's default title/description so they can't duplicate.
+  /*
+   * Strip everything this script is about to own.
+   *
+   * The shell in index.html carries its own og: and twitter: tags so the dev
+   * server has something sane. Left in place they survived into every built
+   * page alongside the generated ones — two og:image tags, and scrapers take
+   * the first, which was the stale one. Per-route metadata has exactly one
+   * author: this file.
+   */
   html = html
     .replace(/\n?\s*<title>[\s\S]*?<\/title>/, "")
-    .replace(/\n?\s*<meta\s+name="description"[\s\S]*?\/>/, "");
+    .replace(/\n?\s*<meta\s+name="description"[\s\S]*?\/>/, "")
+    .replace(/\n?\s*<meta\s+property="og:[^"]*"[^>]*\/>/g, "")
+    .replace(/\n?\s*<meta\s+name="twitter:[^"]*"[^>]*\/>/g, "")
+    .replace(/\n?\s*<link\s+rel="canonical"[^>]*\/>/g, "");
 
   html = html.replace("</head>", `  ${headFor(r)}\n  </head>`);
   html = html.replace('<div id="root"></div>', `<div id="root"></div>\n      ${noscriptFor(r)}`);
