@@ -591,15 +591,15 @@ export const booking = {
 
 export const site = {
   /*
-   * www is canonical, not the apex.
+   * The apex is canonical.
    *
-   * Vercel is configured with the apex redirecting to www (its own
-   * recommendation), and www is what actually serves the site. Canonicals
-   * pointing at the apex would therefore every one of them resolve through a
-   * redirect — search engines follow it, but it is a needless hop and a
-   * mismatch between what we declare and what we serve.
+   * Vercel is configured with www 308-redirecting to the apex, so this must
+   * match: a canonical pointing at a URL that redirects is a needless hop and
+   * tells crawlers one thing while the server does another. If the primary is
+   * ever flipped back to www in Vercel, flip this line with it — they are one
+   * decision, not two.
    */
-  url: "https://www.usaappliancehvac.com",
+  url: "https://usaappliancehvac.com",
   locale: "en_US",
   ogImage: "/og-cover.jpg",
   twitterHandle: "",
