@@ -1,20 +1,16 @@
-import { motion, type Variants } from "framer-motion";
 import { BookButton } from "@/components/BookButton";
 import { CallButton } from "@/components/CallButton";
+import { Enter } from "@/components/Enter";
 import { Placeholder } from "@/components/Placeholder";
 import { hero } from "@/content";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-const rise: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, delay: i * 0.07, ease: EASE },
-  }),
-};
-
+/**
+ * The entrance used to be driven by Framer Motion. On the live site the image
+ * column sat at opacity 0 — Motion animates through requestAnimationFrame,
+ * which is paused whenever the page is not being painted, so the animation
+ * never ran and the photo simply never appeared. `Enter` keeps the same
+ * staggered feel but can only ever be late, not absent.
+ */
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -24,49 +20,39 @@ export function Hero() {
       */}
       <div className="container-page relative grid items-center gap-12 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-24">
         <div className="relative z-10 max-w-2xl">
-          <motion.h1
-            custom={0}
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            /*
-             * Fluid size instead of breakpoint steps: at 1024px the text
-             * column is only ~483px wide, so a fixed lg size overflows.
-             * Measured against the widest word pair in the headline.
-             */
-            style={{ fontSize: "clamp(2.5rem, 4.9vw, 4rem)" }}
-            className="type-display"
-          >
-            {hero.title[0]}{" "}
-            <span className="text-brand-500">{hero.title[1]}</span>
-          </motion.h1>
+          <Enter>
+            <h1
+              /*
+               * Fluid size instead of breakpoint steps: at 1024px the text
+               * column is only ~483px wide, so a fixed lg size overflows.
+               * Measured against the widest word pair in the headline.
+               */
+              style={{ fontSize: "clamp(2.5rem, 4.9vw, 4rem)" }}
+              className="type-display"
+            >
+              {hero.title[0]}{" "}
+              <span className="text-brand-500">{hero.title[1]}</span>
+            </h1>
+          </Enter>
 
-          <motion.p
-            custom={1}
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            className="type-lead prose-measure mt-7 max-w-[46ch] text-[18px] text-ink-muted"
-          >
-            {hero.body}
-          </motion.p>
+          <Enter delay={0.08}>
+            <p className="type-lead prose-measure mt-7 max-w-[46ch] text-[18px] text-ink-muted">
+              {hero.body}
+            </p>
+          </Enter>
 
-          <motion.div
-            custom={2}
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <BookButton size="lg" />
-            <CallButton variant="outline" size="lg" />
-          </motion.div>
+          <Enter delay={0.16}>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <BookButton size="lg" />
+              <CallButton variant="outline" size="lg" />
+            </div>
+          </Enter>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        <Enter
+          delay={0.12}
+          y={0}
+          scale={0.98}
           className="relative lg:-mr-[max(0px,calc((100vw-1240px)/2+2rem))]"
         >
           <Placeholder
@@ -78,8 +64,7 @@ export function Hero() {
             rounded="rounded-[var(--radius-panel)] lg:rounded-r-none"
             className="w-full"
           />
-
-        </motion.div>
+        </Enter>
       </div>
     </section>
   );

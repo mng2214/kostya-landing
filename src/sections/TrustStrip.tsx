@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { Reveal } from "@/components/Reveal";
 import {
   AreaMark,
   HoursMark,
@@ -72,16 +72,8 @@ export function TrustStrip() {
       <div className="container-page">
         <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
           {items.map((item, i) => (
-            <motion.li
-              key={item.value + i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.55,
-                delay: 0.06 + i * 0.07,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+            <Reveal key={item.value + i} delay={0.06 + i * 0.07}>
+            <li
               className={[
                 "group flex items-center gap-4 py-5 lg:py-7",
                 // These are facts, not destinations — so the hover response
@@ -92,22 +84,14 @@ export function TrustStrip() {
                 "motion-safe:ease-[var(--ease-out-quint)] motion-safe:hover:scale-[1.03]",
               ].join(" ")}
             >
-              <motion.span
-                initial={{ opacity: 0, x: -4 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.12 + i * 0.07,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+              <span
                 className={[
                   "inline-flex shrink-0 items-center border-r border-line pr-4 text-brand-500",
                   "transition-colors duration-[var(--dur-base)] group-hover:text-brand-600",
                 ].join(" ")}
               >
                 <item.icon className="h-6 w-[30px] shrink-0" />
-              </motion.span>
+              </span>
 
               <div className="min-w-0">
                 <p
@@ -132,7 +116,8 @@ export function TrustStrip() {
                   {item.label}
                 </p>
               </div>
-            </motion.li>
+            </li>
+            </Reveal>
           ))}
         </ul>
       </div>

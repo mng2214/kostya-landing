@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { Reveal } from "@/components/Reveal";
 import { BookButton } from "@/components/BookButton";
 import { CallButton } from "@/components/CallButton";
 import { Spotlight } from "@/components/Spotlight";
@@ -29,16 +29,8 @@ export function Process() {
 
           <ol className="relative">
             {process.steps.map((step, i) => (
-              <motion.li
-                key={step.n}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+              <Reveal key={step.n} delay={i * 0.08}>
+              <li
                 className="group grid grid-cols-[auto_1fr] gap-x-6 border-t border-white/12 py-7 last:border-b"
               >
                 <span
@@ -58,7 +50,8 @@ export function Process() {
                     {step.body}
                   </p>
                 </div>
-              </motion.li>
+              </li>
+              </Reveal>
             ))}
           </ol>
         </div>
