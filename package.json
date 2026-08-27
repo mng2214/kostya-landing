@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build && bun run scripts/seo-build.ts",
     "preview": "vite preview",
-    "build:seo": "bun run scripts/seo-build.ts",
-    "build:og": "bun run scripts/og-image.ts"
+    "build:seo": "bun run scripts/seo-build.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
@@ -23,7 +22,6 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
-    "sharp": "^0.35.3",
     "typescript": "^5.8.3",
     "vite": "^7.3.1"
   }

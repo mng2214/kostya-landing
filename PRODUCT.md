@@ -1,7 +1,7 @@
-# Kostya Inc — product context
+# USA Appliance & HVAC — product context
 
 ## What it is
-A marketing landing site for Kostya Inc, a handyman / HVAC / appliance repair
+A marketing landing site for USA Appliance & HVAC, a handyman / HVAC / appliance repair
 company operating out of Rolling Meadows, IL and covering Chicago's northwest
 suburbs.
 

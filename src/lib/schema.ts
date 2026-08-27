@@ -1,11 +1,11 @@
 import {
+  allServices,
   businessFacts,
   company,
   faqs,
   googleReviews,
-  packages,
   serviceAreaTowns,
-  services,
+  serviceGroups,
   site,
   type Service,
 } from "@/content";
@@ -27,7 +27,7 @@ export function localBusinessSchema() {
     "@id": ID,
     name: businessFacts.legalName,
     url: site.url,
-    telephone: company.phone,
+    telephone: company.phoneE164,
     email: company.email,
     description: company.tagline,
     image: site.url + site.ogImage,
@@ -56,13 +56,13 @@ export function localBusinessSchema() {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Repair services",
-      itemListElement: services.map((s) => ({
+      itemListElement: allServices.map((s) => ({
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
           name: s.title,
           description: s.short,
-          url: `${site.url}/services/${s.slug}`,
+          ...(s.hasPage ? { url: `${site.url}/${s.groupSlug}/${s.slug}` } : {}),
         },
       })),
     },
@@ -101,27 +101,50 @@ export function websiteSchema() {
   };
 }
 
-export function serviceSchema(service: Service) {
+export function serviceSchema(service: Service, groupSlug: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.title,
     description: service.short,
-    url: `${site.url}/services/${service.slug}`,
+    url: `${site.url}/${groupSlug}/${service.slug}`,
     serviceType: service.title,
     provider: { "@id": ID },
     areaServed: serviceAreaTowns.map((name) => ({ "@type": "City", name })),
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "USD",
-      description: `From ${service.priceFrom}`,
-    },
+    ...(service.includes?.length
+      ? {
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: `${service.title} — what we handle`,
+            itemListElement: service.includes.map((item) => ({
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: item },
+            })),
+          },
+        }
+      : {}),
+  };
+}
+
+/** One Service node per category page. */
+export function serviceGroupSchema(groupSlug: string) {
+  const group = serviceGroups.find((g) => g.slug === groupSlug);
+  if (!group) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: group.title,
+    description: group.short,
+    url: `${site.url}/${group.slug}`,
+    serviceType: group.title,
+    provider: { "@id": ID },
+    areaServed: serviceAreaTowns.map((name) => ({ "@type": "City", name })),
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: `${service.title} — what's included`,
-      itemListElement: service.includes.map((item) => ({
+      name: group.title,
+      itemListElement: group.services.map((s) => ({
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: item },
+        itemOffered: { "@type": "Service", name: s.title, description: s.short },
       })),
     },
   };
@@ -152,20 +175,4 @@ export function breadcrumbSchema(trail: Array<{ name: string; path: string }>) {
   };
 }
 
-export function offerCatalogSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "OfferCatalog",
-    name: "Service plans",
-    url: `${site.url}/packages`,
-    itemListElement: packages.plans.map((plan, i) => ({
-      "@type": "Offer",
-      position: i + 1,
-      name: plan.name,
-      description: plan.summary,
-      priceCurrency: "USD",
-      ...(plan.price.startsWith("$") ? { price: plan.price.replace("$", "") } : {}),
-      seller: { "@id": ID },
-    })),
-  };
-}
+

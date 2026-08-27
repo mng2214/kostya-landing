@@ -9,7 +9,7 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Loader2, PhoneCall, X } from "lucide-react";
-import { company, services } from "@/content";
+import { allServices, company } from "@/content";
 import {
   CALLBACK_SLOTS,
   requestCallback,
@@ -113,7 +113,7 @@ function CallbackModal({
 
   const inputCls = (bad?: string) =>
     cn(
-      "w-full rounded-2xl border bg-white px-4 py-3.5 text-[15px] outline-none transition-colors placeholder:text-ink-muted/50",
+      "w-full rounded-none border bg-white px-4 py-3.5 text-[15px] outline-none transition-colors placeholder:text-ink-muted/50",
       bad ? "border-red-400 focus:border-red-500" : "border-black/12 focus:border-brand-500",
     );
 
@@ -143,7 +143,7 @@ function CallbackModal({
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="absolute right-4 top-4 z-10 inline-flex size-9 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-black/[0.06]"
+              className="absolute right-4 top-4 z-10 inline-flex size-9 items-center justify-center rounded-[var(--radius-action)] text-ink-muted transition-colors hover:bg-black/[0.06]"
             >
               <X className="size-4" aria-hidden="true" />
             </button>
@@ -166,18 +166,18 @@ function CallbackModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mt-7 rounded-[var(--radius-pill)] bg-brand-500 px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-600"
+                  className="mt-7 rounded-[var(--radius-action)] bg-brand-500 px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-600"
                 >
                   Done
                 </button>
               </div>
             ) : (
               <form onSubmit={submit} noValidate className="px-7 pb-8 pt-9">
-                <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                <span className="inline-flex size-12 items-center justify-center rounded-none bg-brand-50 text-brand-600">
                   <PhoneCall className="size-5" aria-hidden="true" />
                 </span>
                 <h2 id="callback-title" className="mt-5 text-[24px] font-semibold">
-                  Order a callback
+                  Request a call
                 </h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
                   Leave a number and a tech calls you — no waiting on hold.
@@ -223,7 +223,7 @@ function CallbackModal({
                         setPhone(e.target.value);
                         setErrors((v) => ({ ...v, phone: undefined }));
                       }}
-                      placeholder="(847) 555-0123"
+                      placeholder="847 555-0123"
                       className={inputCls(errors.phone)}
                     />
                     <p className="mt-1.5 min-h-[18px] text-[13px] text-red-600">
@@ -245,7 +245,7 @@ function CallbackModal({
                       className={cn(inputCls(), "appearance-none pr-11", !topic && "text-ink-muted/50")}
                     >
                       <option value="">Not sure yet</option>
-                      {services.map((s) => (
+                      {allServices.map((s) => (
                         <option key={s.slug} value={s.title}>
                           {s.title}
                         </option>
@@ -265,7 +265,7 @@ function CallbackModal({
                           onClick={() => setWhen(slot.id)}
                           aria-pressed={when === slot.id}
                           className={cn(
-                            "rounded-2xl border px-4 py-3 text-left transition-colors",
+                            "rounded-none border px-4 py-3 text-left transition-colors",
                             when === slot.id
                               ? "border-brand-500 bg-brand-50"
                               : "border-black/12 hover:border-black/25",
@@ -291,7 +291,7 @@ function CallbackModal({
                 {status === "error" && (
                   <p
                     role="alert"
-                    className="mt-5 flex items-start gap-2.5 rounded-2xl bg-red-50 px-4 py-3.5 text-[14px] text-red-700"
+                    className="mt-5 flex items-start gap-2.5 rounded-none bg-red-50 px-4 py-3.5 text-[14px] text-red-700"
                   >
                     <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                     {serverError}
@@ -301,7 +301,7 @@ function CallbackModal({
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-[var(--radius-pill)] bg-brand-500 text-[16px] font-semibold text-white transition-all hover:bg-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-7 inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-[var(--radius-action)] bg-brand-500 text-[16px] font-semibold text-white transition-all hover:bg-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {status === "submitting" ? (
                     <>

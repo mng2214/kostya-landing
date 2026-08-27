@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AlertCircle, CheckCircle2, Clock, Loader2, MapPin, Phone } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-import { company, contactSection, services } from "@/content";
+import { allServices, company, contactSection } from "@/content";
 import { submitLead, type Lead } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ function validate(v: Lead): Errors {
 }
 
 const fieldBase =
-  "w-full rounded-2xl border bg-white px-4 py-3.5 text-[15px] outline-none transition-colors placeholder:text-ink-muted/50";
+  "w-full rounded-none border bg-white px-4 py-3.5 text-[15px] outline-none transition-colors placeholder:text-ink-muted/50";
 
 export function ContactForm() {
   const [values, setValues] = useState<Lead>(empty);
@@ -82,7 +82,7 @@ export function ContactForm() {
                 href={company.phoneHref}
                 className="group flex items-start gap-4"
               >
-                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-none bg-brand-50 text-brand-600">
                   <Phone className="size-5" aria-hidden="true" />
                 </span>
                 <span>
@@ -102,7 +102,7 @@ export function ContactForm() {
                 rel="noreferrer noopener"
                 className="group flex items-start gap-4"
               >
-                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-none bg-brand-50 text-brand-600">
                   <MapPin className="size-5" aria-hidden="true" />
                 </span>
                 <span>
@@ -116,7 +116,7 @@ export function ContactForm() {
               </a>
             </li>
             <li className="flex items-start gap-4">
-              <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-none bg-brand-50 text-brand-600">
                 <Clock className="size-5" aria-hidden="true" />
               </span>
               <span>
@@ -145,13 +145,10 @@ export function ContactForm() {
                   We'll come back with a time window within a couple of hours.
                   For anything urgent, call {company.phone}.
                 </p>
-                <p className="mt-4 text-[11px] uppercase tracking-[0.12em] text-ink-muted/60">
-                  Stub — nothing was actually sent
-                </p>
                 <button
                   type="button"
                   onClick={() => setStatus("idle")}
-                  className="mt-7 rounded-[var(--radius-pill)] border border-black/12 px-6 py-3 text-[14px] font-semibold transition-colors hover:border-brand-500 hover:text-brand-600"
+                  className="mt-7 rounded-[var(--radius-action)] border border-black/12 px-6 py-3 text-[14px] font-semibold transition-colors hover:border-brand-500 hover:text-brand-600"
                 >
                   Send another request
                 </button>
@@ -195,7 +192,7 @@ export function ContactForm() {
                       aria-invalid={invalid("phone")}
                       value={values.phone}
                       onChange={(e) => set("phone", e.target.value)}
-                      placeholder="(847) 555-0123"
+                      placeholder="847 555-0123"
                       className={cn(fieldBase, ring("phone"))}
                     />
                   </Field>
@@ -216,7 +213,7 @@ export function ContactForm() {
                       )}
                     >
                       <option value="">Choose a service</option>
-                      {services.map((s) => (
+                      {allServices.map((s) => (
                         <option key={s.slug} value={s.title}>
                           {s.title}
                         </option>
@@ -243,7 +240,7 @@ export function ContactForm() {
                 {status === "error" && (
                   <p
                     role="alert"
-                    className="flex items-start gap-2.5 rounded-2xl bg-red-50 px-4 py-3.5 text-[14px] text-red-700"
+                    className="flex items-start gap-2.5 rounded-none bg-red-50 px-4 py-3.5 text-[14px] text-red-700"
                   >
                     <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                     {serverError}
@@ -253,7 +250,7 @@ export function ContactForm() {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-[var(--radius-pill)] bg-brand-500 px-7 text-[16px] font-semibold text-white transition-all hover:bg-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-[var(--radius-action)] bg-brand-500 px-7 text-[16px] font-semibold text-white transition-all hover:bg-brand-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {status === "submitting" ? (
                     <>

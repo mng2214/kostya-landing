@@ -26,8 +26,8 @@ export default function AboutPage() {
     <>
       <PageHero
         kicker="Our company"
-        title="A Chicago-area crew that shows up when it says it will"
-        body={`${company.name} covers ${company.serviceArea}. Handyman work, HVAC and appliance repair under one number, with written estimates and a warranty on the labour.`}
+        title="Seven years on Chicago appliance and HVAC equipment"
+        body={`Seven years servicing professional-grade appliance and HVAC equipment across ${company.serviceArea} — for homes, restaurants and managed property. Diagnosis first, then the cost, then the work.`}
         crumbs={[{ label: "About" }]}
       />
       <About />

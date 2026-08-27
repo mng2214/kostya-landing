@@ -10,6 +10,13 @@ import { googleReviews as g } from "@/content";
  * fetch Places reviews server-side and pass them in place of `g.items`.
  */
 export function GoogleReviews() {
+  /*
+   * Renders nothing until real reviews are wired up. An empty five-star block
+   * is worse than no block, and inventing reviews would be both dishonest and
+   * a Google structured-data policy violation.
+   */
+  if (!g.items.length || !g.total) return null;
+
   const max = Math.max(...g.distribution.map((d) => d.count));
 
   return (
@@ -63,7 +70,7 @@ export function GoogleReviews() {
                 href={g.profileUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="mt-7 inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] border border-black/12 px-5 py-3 text-[14px] font-semibold transition-colors hover:border-brand-500 hover:text-brand-600"
+                className="mt-7 inline-flex items-center justify-center gap-2 rounded-[var(--radius-action)] border border-black/12 px-5 py-3 text-[14px] font-semibold transition-colors hover:border-brand-500 hover:text-brand-600"
               >
                 See all on Google
                 <ExternalLink className="size-4" aria-hidden="true" />

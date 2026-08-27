@@ -1,7 +1,7 @@
 import { useSeo } from "@/lib/seo";
 import { seo } from "@/content";
 import { Button } from "@/components/Button";
-import { CallbackButton } from "@/components/CallbackButton";
+import { BookButton } from "@/components/BookButton";
 
 export default function NotFound() {
   useSeo({ ...seo.notFound, noindex: true });
@@ -20,7 +20,7 @@ export default function NotFound() {
       </p>
       <div className="mt-9 flex flex-wrap justify-center gap-3">
         <Button to="/">Back to home</Button>
-        <CallbackButton />
+        <BookButton variant="outline" />
       </div>
     </section>
   );

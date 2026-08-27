@@ -1,4 +1,4 @@
-# Kostya Inc — design system
+# USA Appliance & HVAC — design system
 
 ## Scene
 A homeowner standing in a cold basement at 9pm in January, phone in hand,
@@ -12,9 +12,10 @@ blue-accents-on-white the whole way down.
 
 | Token | Value | Role |
 |---|---|---|
-| `--color-brand-500` | `#5174ff` | Primary action, accents |
-| `--color-brand-600` | `#4353ff` | Hover / pressed |
-| `--color-brand-50` | `#f1f4ff` | Tinted surfaces, icon wells |
+| `--color-brand-500` | `#22409c` | Primary action, accents — 9.2:1 with white |
+| `--color-brand-600` | `#1a3080` | Hover / pressed |
+| `--color-brand-50` | `#eef1fb` | Tinted surfaces, icon wells |
+| `--color-brand-400` | `#7c93e8` | Accents on ink sections — 6.7:1 on `--color-ink` |
 | `--color-ink` | `#0b0b0f` | Body text, drenched sections |
 | `--color-ink-muted` | `#4a4e5a` | Secondary text (≥4.5:1 on white) |
 | `--color-surface` | `#f7f7f7` | Section alternation |
@@ -33,6 +34,20 @@ signage and highlight use.
 
 Pairing two *different* geometric sans-serifs is the usual mistake; using one
 family across its width axis gets contrast without mismatch.
+
+## Shape
+
+Actions are square: `--radius-action: 8px` on every button, icon button and
+tag chip. Not a true 0 — sharp corners on a 48px control read as a rendering
+defect rather than a decision.
+
+Deliberately still round: avatar and initial circles, check bullets, review
+progress bars, decorative blur blobs, and the chat launcher with its pulse
+rings — a square bubble emitting circular rings looks broken.
+
+The earlier accent `#5174ff` was only **3.97:1** against white, below the AA
+floor for the white button labels sitting on it. The current `#22409c` is
+9.2:1, so the primary action is now legible by measurement rather than by hope.
 
 ## Rhythm
 Spacing scale 4/8. Section padding steps `py-16` → `py-24` → `py-28`; the

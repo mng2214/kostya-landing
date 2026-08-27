@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Button } from "@/components/Button";
-import { CallbackButton } from "@/components/CallbackButton";
+import { BookButton } from "@/components/BookButton";
+import { CallButton } from "@/components/CallButton";
+import { Spotlight } from "@/components/Spotlight";
 import { process } from "@/content";
 
 /**
@@ -9,7 +10,7 @@ import { process } from "@/content";
  */
 export function Process() {
   return (
-    <section className="bg-ink py-20 text-white lg:py-28">
+    <Spotlight className="bg-ink py-20 text-white lg:py-28">
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <div>
@@ -21,10 +22,8 @@ export function Process() {
               open. The number you agree to is the number on the invoice.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Button to={process.cta.to} size="lg">
-                {process.cta.label}
-              </Button>
-              <CallbackButton variant="quiet" className="h-14 px-7 text-base" />
+              <BookButton variant="light" size="lg" />
+              <CallButton variant="quiet" size="lg" />
             </div>
           </div>
 
@@ -64,6 +63,6 @@ export function Process() {
           </ol>
         </div>
       </div>
-    </section>
+    </Spotlight>
   );
 }

@@ -1,5 +1,5 @@
 import { Mail, Phone } from "lucide-react";
-import { CallbackButton } from "@/components/CallbackButton";
+import { BookButton } from "@/components/BookButton";
 import { Reveal } from "@/components/Reveal";
 import { company } from "@/content";
 
@@ -12,7 +12,7 @@ export function ContactBand() {
             <h2 className="text-[22px] font-semibold leading-snug">
               Request a quote today for your next project
             </h2>
-            <CallbackButton variant="light" className="self-start" />
+            <BookButton variant="light" className="self-start" />
           </div>
 
           <a

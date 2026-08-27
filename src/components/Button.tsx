@@ -7,12 +7,12 @@ type Variant = "primary" | "outline" | "light" | "ghost";
 type Size = "md" | "lg";
 
 const base =
-  "group inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-medium " +
+  "group inline-flex items-center justify-center gap-2 rounded-[var(--radius-action)] font-medium " +
   "transition-all duration-200 active:scale-[0.98] whitespace-nowrap";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-brand-500 text-white hover:bg-brand-600 shadow-[0_6px_20px_-6px_rgba(81,116,255,0.6)] hover:shadow-[0_10px_28px_-8px_rgba(81,116,255,0.75)]",
+    "bg-brand-500 text-white hover:bg-brand-600 shadow-[0_6px_20px_-6px_rgba(34,64,156,0.45)] hover:shadow-[0_10px_28px_-8px_rgba(34,64,156,0.55)]",
   outline:
     "border border-black/15 text-ink hover:border-black/40 hover:bg-black/[0.03]",
   light:

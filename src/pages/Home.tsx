@@ -1,35 +1,34 @@
-import { useMemo } from "react";
-import { useSeo } from "@/lib/seo";
-import { seo } from "@/content";
-import { faqSchema, localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { Hero } from "@/sections/Hero";
 import { TrustStrip } from "@/sections/TrustStrip";
-import { Services } from "@/sections/Services";
-import { Process } from "@/sections/Process";
-import { About } from "@/sections/About";
+import { ServiceSelector } from "@/sections/ServiceSelector";
 import { WhyUs } from "@/sections/WhyUs";
+import { Equipment } from "@/sections/Equipment";
+import { Segments } from "@/sections/Segments";
+import { ServiceAreasBand } from "@/sections/ServiceAreasBand";
 import { GoogleReviews } from "@/sections/GoogleReviews";
-import { ContactForm } from "@/sections/ContactForm";
 import { Faq } from "@/sections/Faq";
 import { FinalCta } from "@/sections/FinalCta";
+import { useSeo } from "@/lib/seo";
+import { localBusinessSchema, faqSchema } from "@/lib/schema";
+import { seo } from "@/content";
 
 export default function Home() {
-  const schema = useMemo(
-    () => [localBusinessSchema(), websiteSchema(), faqSchema()],
-    [],
-  );
-  useSeo({ ...seo.home, path: "/", schema });
+  useSeo({
+    ...seo.home,
+    path: "/",
+    schema: [localBusinessSchema(), faqSchema()],
+  });
 
   return (
     <>
       <Hero />
       <TrustStrip />
-      <Services />
-      <Process />
-      <About />
+      <ServiceSelector />
       <WhyUs />
+      <Equipment />
+      <Segments />
+      <ServiceAreasBand />
       <GoogleReviews />
-      <ContactForm />
       <Faq />
       <FinalCta />
     </>

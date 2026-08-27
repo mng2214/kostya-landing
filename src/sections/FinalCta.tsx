@@ -1,4 +1,5 @@
-import { Button } from "@/components/Button";
+import { BookButton } from "@/components/BookButton";
+import { CallButton } from "@/components/CallButton";
 import { Reveal } from "@/components/Reveal";
 import { finalCta } from "@/content";
 
@@ -26,17 +27,8 @@ export function FinalCta() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <Button to={finalCta.primary.to} variant="light" size="lg">
-              {finalCta.primary.label}
-            </Button>
-            <Button
-              to={finalCta.secondary.to}
-              variant="outline"
-              size="lg"
-              className="border-white/40 text-white hover:border-white hover:bg-white/10"
-            >
-              {finalCta.secondary.label}
-            </Button>
+            <BookButton variant="light" size="lg" />
+            <CallButton variant="quiet" size="lg" />
           </div>
         </div>
       </Reveal>

@@ -1,6 +1,6 @@
 import { motion, type Variants } from "framer-motion";
-import { Button } from "@/components/Button";
-import { CallbackButton } from "@/components/CallbackButton";
+import { BookButton } from "@/components/BookButton";
+import { CallButton } from "@/components/CallButton";
 import { Placeholder } from "@/components/Placeholder";
 import { hero } from "@/content";
 
@@ -58,13 +58,8 @@ export function Hero() {
             animate="show"
             className="mt-10 flex flex-wrap items-center gap-3"
           >
-            <Button to={hero.primary.to} size="lg">
-              {hero.primary.label}
-            </Button>
-            <CallbackButton
-              label="Order a callback"
-              className="h-14 px-7 text-base"
-            />
+            <BookButton size="lg" />
+            <CallButton variant="outline" size="lg" />
           </motion.div>
         </div>
 
@@ -75,7 +70,10 @@ export function Hero() {
           className="relative lg:-mr-[max(0px,calc((100vw-1240px)/2+2rem))]"
         >
           <Placeholder
-            label="Hero — technician portrait - потом добавим)"
+            slot="hero-technician"
+            alt="A USA Appliance & HVAC technician testing a furnace control board with a multimeter in a Chicago basement"
+            priority
+            label="Hero — technician portrait"
             ratio="4/3.6"
             rounded="rounded-[var(--radius-panel)] lg:rounded-r-none"
             className="w-full"

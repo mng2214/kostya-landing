@@ -1,10 +1,11 @@
 /**
- * Crisp loader.
+ * Crisp live chat loader.
  *
- * With VITE_CRISP_WEBSITE_ID set, the real Crisp widget is injected and the
- * local stub never renders. Without it, `isConfigured` is false and the app
- * falls back to <CrispChat /> — a visual stand-in so the layout can be
- * reviewed without a Crisp account.
+ * The website ID is not a secret — it ships in the client script by design —
+ * so it lives here with an env override, the same arrangement as the Formspree
+ * endpoint. Setting VITE_CRISP_WEBSITE_ID to an empty string turns the real
+ * widget off and falls back to the local stub bubble, which is what you want
+ * on a staging build that should not appear in the live inbox.
  */
 
 declare global {
@@ -14,7 +15,12 @@ declare global {
   }
 }
 
-const websiteId = import.meta.env.VITE_CRISP_WEBSITE_ID as string | undefined;
+const override = import.meta.env.VITE_CRISP_WEBSITE_ID as string | undefined;
+
+const websiteId =
+  override === undefined
+    ? "4c83fcfa-8a14-430e-855e-9799a4b18f76"
+    : override.trim();
 
 export const isConfigured = Boolean(websiteId);
 

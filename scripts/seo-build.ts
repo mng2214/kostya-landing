@@ -20,20 +20,21 @@ import {
   businessFacts,
   faqs,
   hero,
-  packages,
+  allServices,
+  equipmentServiced,
+  groupSeo,
   process as processContent,
   seo,
   serviceAreaTowns,
-  services,
+  serviceGroups,
   site,
-  type Service,
   whyUs,
 } from "../src/content";
 import {
   breadcrumbSchema,
   faqSchema,
   localBusinessSchema,
-  offerCatalogSchema,
+  serviceGroupSchema,
   serviceSchema,
   websiteSchema,
 } from "../src/lib/schema";
@@ -68,7 +69,8 @@ const routes: Route[] = [
     schema: [localBusinessSchema(), websiteSchema(), faqSchema()],
     summary: [
       `${hero.title.join(" ")} — ${hero.body}`,
-      `Services: ${services.map((s) => s.title).join(", ")}.`,
+      `Services: ${allServices.map((s) => s.title).join(", ")}.`,
+      `Equipment serviced: ${equipmentServiced.groups.flatMap((g) => g.items).join(", ")}.`,
       `Service area: ${serviceAreaTowns.join(", ")}.`,
       `Why ${company.name}: ${advantages.map((a) => a.title).join("; ")}.`,
       `Process: ${processContent.steps.map((s) => `${s.n} ${s.title} — ${s.body}`).join(" ")}`,
@@ -87,38 +89,54 @@ const routes: Route[] = [
       `Service area: ${serviceAreaTowns.join(", ")}.`,
     ],
   },
-  {
-    path: "/services",
-    ...seo.services,
+  ...serviceGroups.map((g): Route => ({
+    path: `/${g.slug}`,
+    ...groupSeo[g.slug],
     priority: 0.9,
     changefreq: "monthly",
-    schema: [localBusinessSchema(), breadcrumbSchema([{ name: "Services", path: "/services" }]), faqSchema()],
-    summary: services.map((s) => `${s.title} (from ${s.priceFrom}): ${s.short} Includes ${s.includes.join(", ")}.`),
-  },
-  ...services.map((s): Route => ({
-    path: `/services/${s.slug}`,
-    title: `${s.title} — ${company.name}, ${businessFacts.addressLocality} IL`.slice(0, 65),
-    description: serviceDescription(s),
-    priority: 0.8,
-    changefreq: "monthly",
     schema: [
-      serviceSchema(s),
-      breadcrumbSchema([
-        { name: "Services", path: "/services" },
-        { name: s.title, path: `/services/${s.slug}` },
-      ]),
+      serviceGroupSchema(g.slug),
+      breadcrumbSchema([{ name: g.navLabel, path: `/${g.slug}` }]),
+      faqSchema(),
+    ].filter(Boolean),
+    summary: [
+      `${g.title}: ${g.short}`,
+      ...g.intro,
+      `Includes: ${g.services.map((x) => `${x.title} — ${x.short}`).join(" ")}`,
     ],
-    summary: [...s.body, `What's included: ${s.includes.join(", ")}.`, `Starting at ${s.priceFrom}.`],
   })),
+  ...allServices
+    .filter((x) => x.hasPage)
+    .map((x): Route => ({
+      path: `/${x.groupSlug}/${x.slug}`,
+      title: `${x.title} — ${company.name}`.slice(0, 60),
+      description: x.short,
+      priority: 0.8,
+      changefreq: "monthly",
+      schema: [
+        serviceSchema(x, x.groupSlug),
+        breadcrumbSchema([
+          { name: x.group, path: `/${x.groupSlug}` },
+          { name: x.title, path: `/${x.groupSlug}/${x.slug}` },
+        ]),
+      ],
+      summary: [x.short, ...(x.body ?? []), ...(x.includes ?? [])],
+    })),
   {
-    path: "/packages",
-    ...seo.packages,
+    path: "/service-areas",
+    ...seo.serviceAreas,
     priority: 0.7,
     changefreq: "monthly",
-    schema: [offerCatalogSchema(), breadcrumbSchema([{ name: "Packages", path: "/packages" }]), faqSchema()],
-    summary: packages.plans.map(
-      (p) => `${p.name} — ${p.price} ${p.cadence}. ${p.summary} Includes: ${p.features.join(", ")}.`,
-    ),
+    schema: [localBusinessSchema(), breadcrumbSchema([{ name: "Service Areas", path: "/service-areas" }])],
+    summary: [`Towns covered: ${serviceAreaTowns.join(", ")}.`],
+  },
+  {
+    path: "/book",
+    ...seo.book,
+    priority: 0.9,
+    changefreq: "monthly",
+    schema: [localBusinessSchema(), breadcrumbSchema([{ name: "Book Online", path: "/book" }])],
+    summary: [`Book appliance or HVAC service online, or call ${company.phone}.`],
   },
   {
     path: "/contact",
@@ -212,6 +230,28 @@ for (const r of routes) {
   written++;
 }
 
+/*
+ * A real 404 document.
+ *
+ * Without one, the catch-all rewrite answered every unknown URL with the home
+ * page at HTTP 200 — a soft 404. Search engines treat that as duplicate
+ * content and it hides genuine broken links. Vercel serves this file with a
+ * real 404 status for anything that is not a generated route.
+ */
+{
+  let html = base
+    .replace(/\n?\s*<title>[\s\S]*?<\/title>/, "")
+    .replace(/\n?\s*<meta\s+name="description"[\s\S]*?\/>/, "");
+  html = html.replace(
+    "</head>",
+    `  <title>${esc(seo.notFound.title)}</title>
+    <meta name="description" content="${esc(seo.notFound.description)}" />
+    <meta name="robots" content="noindex, follow" />
+  </head>`,
+  );
+  fs.writeFileSync(path.join(DIST, "404.html"), html);
+}
+
 // --- robots.txt -------------------------------------------------------------
 
 fs.writeFileSync(
@@ -270,7 +310,7 @@ console.log(`seo-build: ${written} route pages, robots.txt, sitemap.xml`);
 
 const llms = `# ${company.name}
 
-> ${company.tagline} in ${businessFacts.addressLocality}, Illinois and the northwest Chicago suburbs. One licensed and insured crew covers handyman work, heating and cooling, and appliance repair — with a fixed written estimate before any work starts and 24/7 emergency dispatch for no-heat and no-cooling calls.
+> ${company.tagline} across ${company.serviceArea}. One company covers appliance diagnostics and repair, HVAC repair and installation, and commercial refrigeration and kitchen equipment — for residential and commercial customers, with online booking.
 
 ## Why ${company.name} over other contractors
 
@@ -278,22 +318,27 @@ ${advantages.map((a) => `- **${a.title}.** ${a.detail}`).join("\n")}
 
 ## Services
 
-${services
+${serviceGroups
   .map(
-    (s) =>
-      `- [${s.title}](${site.url}/services/${s.slug}): ${s.short} From ${s.priceFrom}. Covers ${s.includes.join(", ")}.`,
+    (g) =>
+      `### [${g.title}](${site.url}/${g.slug})\n\n${g.short}\n\n` +
+      g.services
+        .map((x) =>
+          x.hasPage
+            ? `- [${x.title}](${site.url}/${x.groupSlug ?? g.slug}/${x.slug}): ${x.short}`
+            : `- ${x.title}: ${x.short}`,
+        )
+        .join("\n"),
   )
-  .join("\n")}
+  .join("\n\n")}
+
+## Equipment serviced
+
+${equipmentServiced.groups.map((g) => `- **${g.label}**: ${g.items.join(", ")}`).join("\n")}
 
 ## Service area
 
 ${serviceAreaTowns.join(", ")} — Illinois. ${company.serviceArea}.
-
-## Pricing
-
-${packages.plans.map((p) => `- **${p.name}** — ${p.price} ${p.cadence}. ${p.summary}`).join("\n")}
-
-The $149 diagnostic fee is waived if you approve the repair. Every job is quoted in writing on site before work begins.
 
 ## How a job runs
 
@@ -320,29 +365,18 @@ fs.writeFileSync(path.join(DIST, "llms.txt"), llms);
 const llmsFull = `${llms}
 ## Service detail
 
-${services
+${allServices
+  .filter((x) => x.hasPage)
   .map(
-    (s) => `### ${s.title}
+    (x) => `### ${x.title}
 
-URL: ${site.url}/services/${s.slug}
-Starting price: ${s.priceFrom}
+URL: ${site.url}/${x.groupSlug}/${x.slug}
+Category: ${x.group}
 
-${s.body.join("\n\n")}
+${(x.body ?? []).join("\n\n")}
 
-Included in this service:
-${s.includes.map((i) => `- ${i}`).join("\n")}`,
-  )
-  .join("\n\n")}
-
-## Plan detail
-
-${packages.plans
-  .map(
-    (p) => `### ${p.name} — ${p.price} ${p.cadence}
-
-${p.summary}
-
-${p.features.map((f) => `- ${f}`).join("\n")}`,
+What we handle:
+${(x.includes ?? []).map((i) => `- ${i}`).join("\n")}`,
   )
   .join("\n\n")}
 
@@ -350,13 +384,16 @@ ${p.features.map((f) => `- ${f}`).join("\n")}`,
 
 This site publishes schema.org markup as HomeAndConstructionBusiness and
 HVACBusiness, including areaServed for every town listed above and an
-OfferCatalog of all services. See ${site.url}/ for the JSON-LD block.
+OfferCatalog of all services. No aggregateRating is published: the review data
+on the site is not yet connected to a real Google Business Profile.
+See ${site.url}/ for the JSON-LD block.
 
 ## A note on accuracy
 
-Contact details, service lines, pricing tiers and service area on this page are
-current. Company statistics and customer reviews shown on the website are
-placeholders pending real data and should not be quoted as fact.
+Contact details, service lines and service area on this page are current.
+There is no published price list. Customer reviews and any company statistics
+shown on the website are placeholders pending real data and must not be quoted
+as fact.
 `;
 
 fs.writeFileSync(path.join(DIST, "llms-full.txt"), llmsFull);

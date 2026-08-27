@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Logo } from "./Logo";
 import { ArrowRight, Check, Mail, MapPin, Phone } from "lucide-react";
-import { company, footer, services } from "@/content";
+import { company, footer, serviceGroups } from "@/content";
+import { SocialIcon } from "./SocialIcon";
+
+/** Same number as the phone line, in wa.me's digits-only format. */
+const whatsappHref =
+  company.socials.find((s) => s.icon === "whatsapp")?.href ??
+  `https://wa.me/${company.phoneHref.replace(/\D/g, "")}`;
 
 function Column({
   title,
@@ -44,7 +51,7 @@ function Newsletter() {
       >
         Sign up for our newsletter
       </label>
-      <div className="flex items-center gap-2 rounded-[var(--radius-pill)] border border-black/10 bg-white p-1.5 pl-5 focus-within:border-brand-500">
+      <div className="flex items-center gap-2 rounded-[var(--radius-action)] border border-black/10 bg-white p-1.5 pl-5 focus-within:border-brand-500">
         <input
           id="newsletter-email"
           type="email"
@@ -57,7 +64,7 @@ function Newsletter() {
         <button
           type="submit"
           aria-label="Subscribe"
-          className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition-colors hover:bg-brand-600"
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white transition-colors hover:bg-brand-600"
         >
           {done ? (
             <Check className="size-4" aria-hidden="true" />
@@ -82,14 +89,7 @@ export function Footer() {
       <div className="container-page">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <Link
-              to="/"
-              className="inline-flex min-h-11 items-center whitespace-nowrap text-[22px] leading-none"
-              style={{ fontVariationSettings: '"wdth" 112, "wght" 800', letterSpacing: "-0.03em" }}
-            >
-              {company.logo.main}
-              <span className="text-brand-500">{company.logo.accent}</span>
-            </Link>
+            <Logo className="[&_img]:h-11" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-ink-muted">
               {footer.blurb}
             </p>
@@ -116,10 +116,10 @@ export function Footer() {
           <div className="space-y-9">
             <Column title="Services">
               <ul className="-my-1.5">
-                {services.slice(0, 4).map((s) => (
+                {serviceGroups.map((s) => (
                   <li key={s.slug}>
                     <Link
-                      to={`/services/${s.slug}`}
+                      to={`/${s.slug}`}
                       className="-mx-2 inline-flex min-h-11 items-center px-2 text-[15px] text-ink-muted transition-colors hover:text-brand-600"
                     >
                       {s.title}
@@ -138,6 +138,25 @@ export function Footer() {
                   >
                     <Phone className="size-4 text-brand-500" aria-hidden="true" />
                     {company.phone}
+                  </a>
+                </li>
+                {/*
+                  WhatsApp sits directly under the phone number because it is
+                  the same number — for anyone who would rather send a photo of
+                  the fault than describe it, which for appliance work is often
+                  faster than the call.
+                */}
+                <li>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="-mx-2 inline-flex min-h-11 items-center gap-2.5 px-2 transition-colors hover:text-brand-600"
+                  >
+                    <span className="text-brand-500">
+                      <SocialIcon name="whatsapp" className="size-4" />
+                    </span>
+                    WhatsApp
                   </a>
                 </li>
                 <li>

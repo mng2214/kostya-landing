@@ -5,21 +5,9 @@ import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { company, nav, navDropdown } from "@/content";
 import { cn } from "@/lib/utils";
 import { TopBar } from "./TopBar";
-import { CallbackButton } from "./CallbackButton";
+import { Logo } from "./Logo";
+import { BookButton } from "./BookButton";
 
-function Logo() {
-  return (
-    <Link
-      to="/"
-      className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap text-[19px] leading-none sm:text-[22px]"
-      style={{ fontVariationSettings: '"wdth" 112, "wght" 800', letterSpacing: "-0.03em" }}
-      aria-label={`${company.name} — home`}
-    >
-      {company.logo.main}
-      <span className="text-brand-500">{company.logo.accent}</span>
-    </Link>
-  );
-}
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
@@ -88,7 +76,7 @@ export function Navbar() {
 
           <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
             {nav.map((item) => (
-              <NavLink key={item.to} to={item.to} className={linkClass} end={item.to === "/"}>
+              <NavLink key={item.to} to={item.to} className={linkClass}>
                 {item.label}
               </NavLink>
             ))}
@@ -123,13 +111,13 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.16, ease: "easeOut" }}
-                    className="absolute left-1/2 top-[calc(100%+16px)] w-60 -translate-x-1/2 overflow-hidden rounded-2xl border border-black/[0.07] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.28)]"
+                    className="absolute left-1/2 top-[calc(100%+16px)] w-60 -translate-x-1/2 overflow-hidden rounded-none border border-black/[0.07] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.28)]"
                   >
                     {navDropdown.items.map((item) => (
                       <Link
                         key={item.to}
                         to={item.to}
-                        className="block rounded-xl px-3.5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:bg-brand-50 hover:text-brand-600"
+                        className="block rounded-none px-3.5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:bg-brand-50 hover:text-brand-600"
                       >
                         {item.label}
                       </Link>
@@ -146,13 +134,13 @@ export function Navbar() {
               base class sets `inline-flex`, and Tailwind resolves same-property
               conflicts by stylesheet order, not class order.
             */}
-            <div className="hidden xl:block">
-              <CallbackButton label="Order a callback" />
+            <div className="hidden lg:block">
+              <BookButton />
             </div>
 
             <a
               href={company.phoneHref}
-              className="hidden h-12 items-center gap-2.5 rounded-[var(--radius-pill)] bg-brand-500 px-6 text-[15px] font-semibold text-white shadow-[0_6px_20px_-6px_rgba(81,116,255,0.6)] transition-all hover:bg-brand-600 active:scale-[0.98] lg:inline-flex"
+              className="hidden h-12 items-center gap-2.5 whitespace-nowrap rounded-[var(--radius-action)] bg-brand-500 px-6 text-[15px] font-semibold text-white shadow-[0_6px_20px_-6px_rgba(34,64,156,0.45)] transition-all hover:bg-brand-600 active:scale-[0.98] lg:inline-flex"
             >
               <Phone className="size-4" aria-hidden="true" />
               {company.phone}
@@ -163,7 +151,7 @@ export function Navbar() {
             <a
               href={company.phoneHref}
               aria-label={`Call ${company.phone}`}
-              className="inline-flex size-11 items-center justify-center rounded-full bg-brand-500 text-white shadow-[0_6px_20px_-8px_rgba(81,116,255,0.7)] transition-colors hover:bg-brand-600 lg:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white shadow-[0_6px_20px_-8px_rgba(34,64,156,0.5)] transition-colors hover:bg-brand-600 lg:hidden"
             >
               <Phone className="size-[18px]" aria-hidden="true" />
             </a>
@@ -172,7 +160,7 @@ export function Navbar() {
               type="button"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-black/10 text-ink transition-colors hover:bg-black/[0.04] lg:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] border border-black/10 text-ink transition-colors hover:bg-black/[0.04] lg:hidden"
             >
               <Menu className="size-5" aria-hidden="true" />
             </button>
@@ -206,7 +194,7 @@ export function Navbar() {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="inline-flex size-11 items-center justify-center rounded-full border border-black/10"
+                  className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] border border-black/10"
                 >
                   <X className="size-5" aria-hidden="true" />
                 </button>
@@ -217,10 +205,9 @@ export function Navbar() {
                   <NavLink
                     key={item.to}
                     to={item.to}
-                    end={item.to === "/"}
                     className={({ isActive }) =>
                       cn(
-                        "rounded-xl px-4 py-3 text-[17px] font-medium transition-colors",
+                        "rounded-none px-4 py-3 text-[17px] font-medium transition-colors",
                         isActive
                           ? "bg-brand-50 text-brand-600"
                           : "text-ink hover:bg-black/[0.04]",
@@ -235,15 +222,15 @@ export function Navbar() {
               <div className="mt-auto space-y-3 border-t border-black/[0.07] pt-6">
                 <a
                   href={company.phoneHref}
-                  className="flex h-13 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-brand-500 px-6 py-3.5 font-semibold text-white"
+                  className="flex h-13 items-center justify-center gap-2 rounded-[var(--radius-action)] bg-brand-500 px-6 py-3.5 font-semibold text-white"
                 >
                   <Phone className="size-4" aria-hidden="true" />
                   {company.phone}
                 </a>
-                <CallbackButton className="w-full" />
+                <BookButton className="w-full" />
                 <a
                   href={company.emailHref}
-                  className="flex items-center justify-center rounded-[var(--radius-pill)] border border-black/12 px-6 py-3.5 font-medium text-ink"
+                  className="flex items-center justify-center rounded-[var(--radius-action)] border border-black/12 px-6 py-3.5 font-medium text-ink"
                 >
                   {company.email}
                 </a>

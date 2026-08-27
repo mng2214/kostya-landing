@@ -23,7 +23,7 @@ export function PageHero({
         <nav aria-label="Breadcrumb" className="mb-7">
           <ol className="flex flex-wrap items-center gap-1.5 text-[13px] text-ink-muted">
             <li>
-              <Link to="/" className="transition-colors hover:text-brand-600">
+              <Link to="/" className="-my-2 inline-flex min-h-11 items-center py-2 transition-colors hover:text-brand-600">
                 Home
               </Link>
             </li>
@@ -31,7 +31,7 @@ export function PageHero({
               <li key={c.label} className="flex items-center gap-1.5">
                 <ChevronRight className="size-3.5 opacity-50" aria-hidden="true" />
                 {c.to ? (
-                  <Link to={c.to} className="transition-colors hover:text-brand-600">
+                  <Link to={c.to} className="-my-2 inline-flex min-h-11 items-center py-2 transition-colors hover:text-brand-600">
                     {c.label}
                   </Link>
                 ) : (

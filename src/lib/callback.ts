@@ -1,7 +1,4 @@
-/**
- * Callback requests — STUB.
- * Same idea as submitLead: one function to replace when a real backend exists.
- */
+import { sendToFormspree } from "./forms";
 
 export type CallbackRequest = {
   name: string;
@@ -21,16 +18,25 @@ export const CALLBACK_SLOTS = [
   { id: "evening", label: "Evening", hint: "17:00 – 20:00" },
 ] as const;
 
+const SLOT_LABEL: Record<string, string> = Object.fromEntries(
+  CALLBACK_SLOTS.map((s) => [s.id, s.label]),
+);
+
+/** "Call me back" modal. Same inbox as the contact form, different subject. */
 export async function requestCallback(
   req: CallbackRequest,
 ): Promise<CallbackResult> {
-  await new Promise((r) => setTimeout(r, 800));
+  const res = await sendToFormspree(
+    {
+      form: "Callback request",
+      name: req.name,
+      phone: req.phone,
+      preferred_time: SLOT_LABEL[req.when] ?? req.when,
+      topic: req.topic || "Not specified",
+    },
+    `CALLBACK — ${req.name} — ${SLOT_LABEL[req.when] ?? req.when}`,
+  );
 
-  if (typeof navigator !== "undefined" && navigator.onLine === false) {
-    return { ok: false, error: "You appear to be offline. Try again in a moment." };
-  }
-
-  // eslint-disable-next-line no-console
-  console.info("[stub] callback requested — not sent anywhere yet:", req);
+  if (!res.ok) return res;
   return { ok: true, etaMinutes: req.when === "asap" ? 15 : 60 };
 }

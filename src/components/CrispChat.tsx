@@ -49,7 +49,7 @@ export function CrispChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="flex h-[420px] w-[min(88vw,340px)] flex-col overflow-hidden rounded-3xl border border-black/[0.08] bg-white shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]"
+            className="flex h-[420px] w-[min(88vw,340px)] flex-col overflow-hidden rounded-none border border-black/[0.08] bg-white shadow-[0_30px_70px_-25px_rgba(0,0,0,0.45)]"
             role="dialog"
             aria-label="Live chat"
           >
@@ -81,8 +81,8 @@ export function CrispChat() {
                   key={i}
                   className={
                     m.from === "me"
-                      ? "ml-auto max-w-[80%] rounded-2xl rounded-br-md bg-brand-500 px-3.5 py-2.5 text-[14px] leading-snug text-white"
-                      : "mr-auto max-w-[85%] rounded-2xl rounded-bl-md bg-white px-3.5 py-2.5 text-[14px] leading-snug text-ink shadow-sm"
+                      ? "ml-auto max-w-[80%] rounded-none rounded-br-md bg-brand-500 px-3.5 py-2.5 text-[14px] leading-snug text-white"
+                      : "mr-auto max-w-[85%] rounded-none rounded-bl-md bg-white px-3.5 py-2.5 text-[14px] leading-snug text-ink shadow-sm"
                   }
                 >
                   {m.text}
@@ -97,13 +97,13 @@ export function CrispChat() {
                 onKeyDown={(e) => e.key === "Enter" && send()}
                 placeholder="Type a message…"
                 aria-label="Message"
-                className="h-10 min-w-0 flex-1 rounded-full bg-surface px-4 text-[14px] outline-none placeholder:text-ink-muted/60"
+                className="h-10 min-w-0 flex-1 rounded-[var(--radius-action)] bg-surface px-4 text-[14px] outline-none placeholder:text-ink-muted/60"
               />
               <button
                 type="button"
                 onClick={send}
                 aria-label="Send message"
-                className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition-colors hover:bg-brand-600"
+                className="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white transition-colors hover:bg-brand-600"
               >
                 <Send className="size-4" aria-hidden="true" />
               </button>
@@ -132,7 +132,7 @@ export function CrispChat() {
             setEverOpened(true);
           }}
           aria-label={open ? "Close chat" : "Open chat"}
-          className="relative inline-flex size-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-[0_12px_30px_-8px_rgba(81,116,255,0.8)] transition-transform hover:scale-105 active:scale-95"
+          className="relative inline-flex size-14 items-center justify-center rounded-full bg-brand-500 text-white shadow-[0_12px_30px_-8px_rgba(34,64,156,0.55)] transition-transform hover:scale-105 active:scale-95"
         >
           {open ? (
             <X className="size-6" aria-hidden="true" />

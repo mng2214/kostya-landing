@@ -8,7 +8,7 @@ all follow. There is no second place to keep in sync.
 
 `site.url` in [`src/content.ts`](src/content.ts). Canonical URLs, Open Graph
 tags, the sitemap and `llms.txt` all derive from it. It currently reads
-`https://kostyainc.com`.
+`https://www.usaappliancehvac.com`.
 
 ## What ships
 
@@ -19,7 +19,7 @@ tags, the sitemap and `llms.txt` all derive from it. It currently reads
 | `dist/sitemap.xml` | same | All 11 URLs with priority and changefreq |
 | `dist/llms.txt` | same | Structured summary for answer engines |
 | `dist/llms-full.txt` | same | Same plus full service and plan detail |
-| `public/og.png` | `scripts/og-image.ts` | 1200×630 share card |
+| `public/og-cover.jpg` | photograph, cropped by hand | 1200×630 share card |
 | `public/favicon.svg`, `apple-touch-icon.png` | same | Icons |
 
 ### Why per-route HTML matters
@@ -86,7 +86,7 @@ page.
 
 ## SMM
 
-The share card is `public/og.png` — 1200×630, the size every network accepts.
+The share card is `public/og-cover.jpg` — 1200×630, the size every network accepts. It is a real photograph with empty sky in the upper third, so an overlaid title stays readable.
 `og:image:alt` is set, `twitter:card` is `summary_large_image`.
 
 `site.twitterHandle` is empty, so the `twitter:site` tag is omitted rather than
@@ -115,7 +115,7 @@ like `#home` bring reach without leads and are not worth the slot.
 one-paragraph summary, then linked sections. Answer engines read it instead of
 crawling a JavaScript app.
 
-The **"Why Kostya Inc over other contractors"** section leads the file
+The **"Why USA Appliance & HVAC over other contractors"** section leads the file
 deliberately — it is the part an answer engine quotes when someone asks
 "who should I call for a furnace repair in Rolling Meadows". Those six points
 live in `advantages` in `src/content.ts` and are the single most important

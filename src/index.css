@@ -6,12 +6,12 @@
     Roboto, "Helvetica Neue", sans-serif;
 
   /* Identity — carried over from the original brand. */
-  --color-brand-50: #f1f4ff;
-  --color-brand-100: #dde4ff;
-  --color-brand-400: #7b95ff;
-  --color-brand-500: #5174ff;
-  --color-brand-600: #4353ff;
-  --color-brand-700: #3742d6;
+  --color-brand-50: #eef1fb;
+  --color-brand-100: #dae1f5;
+  --color-brand-400: #7c93e8;
+  --color-brand-500: #22409c;
+  --color-brand-600: #1a3080;
+  --color-brand-700: #142663;
 
   /* Ink carries authority; one section is drenched in it. */
   --color-ink: #0b0b0f;
@@ -21,9 +21,11 @@
   --color-surface-alt: #f1f1f7;
   --color-line: #e6e6ec;
 
-  --radius-pill: 120px;
-  --radius-card: 18px;
-  --radius-panel: 28px;
+  /* Square corners, site-wide. One token per role so the whole thing can be
+     softened again from three lines if it ever reads too hard. */
+  --radius-action: 0px;
+  --radius-card: 0px;
+  --radius-panel: 0px;
 
   /* Semantic layer order — no arbitrary 9999s. */
   --z-sticky: 40;
@@ -118,9 +120,9 @@
 /* Chat launcher attention ring. Two staggered rings read as a heartbeat
    rather than a strobe. Suppressed entirely for reduced-motion users. */
 @keyframes chat-ping {
-  0%   { transform: scale(1);    opacity: 0.5; }
-  70%  { transform: scale(1.95); opacity: 0; }
-  100% { transform: scale(1.95); opacity: 0; }
+  0%   { transform: scale(1);   opacity: 0.4; }
+  70%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
 
 .chat-ring {
@@ -132,4 +134,106 @@
 
 @media (prefers-reduced-motion: reduce) {
   .chat-ring { display: none; }
+}
+
+/* ---- Marquee -------------------------------------------------------------
+   Track is duplicated in the DOM and shifted by exactly half its width, which
+   makes the loop seamless for any content length. */
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee-track {
+  animation: marquee-scroll var(--marquee-duration, 60s) linear infinite;
+  will-change: transform;
+}
+
+.marquee-track-reverse {
+  animation-direction: reverse;
+}
+
+/* Reading a specific name is easier when the row holds still. */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-fade {
+  background: linear-gradient(to right, var(--marquee-edge, transparent), transparent);
+}
+.marquee-fade-right {
+  background: linear-gradient(to left, var(--marquee-edge, transparent), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ---- Spotlight -----------------------------------------------------------
+   Follows the pointer via CSS custom properties written from a rAF, so no
+   React render is involved. Hidden until the pointer enters. */
+.spotlight-glow {
+  opacity: var(--spot-opacity, 0);
+  transition: opacity 400ms ease-out;
+  background: radial-gradient(
+    520px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    color-mix(in oklab, var(--color-brand-400) 26%, transparent),
+    transparent 65%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-glow { display: none; }
+}
+
+/* Rings injected into Crisp's own launcher, so they track it by construction
+   rather than by mirrored coordinates. */
+/*
+ * Crisp ships blanket resets over its own subtree, which flattened these to
+ * position: static. Scoping through .crisp-client outranks them without
+ * !important; the ring size is a variable so it can be tuned in one place.
+ */
+.crisp-client .crisp-pulse-host {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+}
+
+.crisp-client .crisp-pulse-host .chat-ring {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 9999px;
+  background: var(--color-brand-500);
+}
+
+/* One motion vocabulary for the whole site: same curve, three durations.
+   Exponential ease-out — fast start, long settle, no bounce. */
+@theme {
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --dur-fast: 220ms;
+  --dur-base: 420ms;
+  --dur-slow: 680ms;
+}
+
+/* Open-for-business indicator. Reports state, so it runs only while the
+   company is actually open — and stops for reduced-motion users, who still
+   get the solid dot and the text label. */
+@keyframes status-pulse {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.status-pulse {
+  animation: status-pulse 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-pulse { display: none; }
 }

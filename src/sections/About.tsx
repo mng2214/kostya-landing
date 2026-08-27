@@ -10,12 +10,16 @@ export function About() {
         <Reveal className="order-2 lg:order-1">
           <div className="grid grid-cols-2 gap-4">
             <Placeholder
+              slot="about-crew"
+              alt="Two USA Appliance & HVAC technicians talking through a job at the door of a Chicago two-flat"
               label="Crew on site"
               ratio="3/4"
               className="mt-8 w-full"
               rounded="rounded-[var(--radius-card)]"
             />
             <Placeholder
+              slot="about-van"
+              alt="The back of a USA Appliance & HVAC work van, shelved with parts bins, copper line set and a vacuum pump"
               label="Van & tools"
               ratio="3/4"
               className="w-full"
