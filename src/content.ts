@@ -460,7 +460,9 @@ export const segments = {
         "Repair-or-replace advice you can act on",
         "Parts for all major brands on the van",
       ],
-      cta: { label: "Book a repair", to: "/book" },
+      // Rendered by <BookButton>, which derives its own label; kept so the
+      // two cards share one shape.
+      cta: { label: "Request a call", to: "/book" },
     },
     {
       key: "commercial",
@@ -477,7 +479,7 @@ export const segments = {
 };
 
 export const contactSection = {
-  title: "Book a service call",
+  title: "Request a service call",
   body: "Tell us what the equipment is doing and we will come back with a time window. A sentence about the symptom is usually enough to bring the right part on the first visit.",
 };
 
@@ -584,8 +586,8 @@ export const crisp = {
  * button label follows suit — see lib/booking.ts.
  */
 export const booking = {
-  headline: "Book a service call",
-  body: "Pick a time that works. You will get a confirmation and a technician assigned to the job.",
+  headline: "Request a service call",
+  body: "Tell us what the equipment is doing and we come back with a time window. Residential and commercial, across Chicago and the surrounding areas.",
   provider: "Housecall Pro",
 } as const;
 
@@ -704,7 +706,7 @@ export const seo = {
   home: {
     title: "Appliance & HVAC Repair in Chicago — USA Appliance & HVAC",
     description:
-      "Appliance and HVAC diagnostics, repair, installation and maintenance across Chicago and surrounding areas. Residential and commercial. Book online.",
+      "Appliance and HVAC diagnostics, repair, installation and maintenance across Chicago and surrounding areas. Residential and commercial. Call or request a visit.",
   },
   about: {
     title: "About USA Appliance & HVAC — Chicago Service Company",
@@ -739,12 +741,12 @@ export const seo = {
   contact: {
     title: "Contact USA Appliance & HVAC — Chicago",
     description:
-      "Call 224 360-1633 or book online. Appliance and HVAC service for residential and commercial customers across Chicago and surrounding areas.",
+      "Call 224 360-1633 or send a request. Appliance and HVAC service for residential and commercial customers across Chicago and surrounding areas.",
   },
   book: {
-    title: "Book Online — USA Appliance & HVAC",
+    title: "Request Service — USA Appliance & HVAC, Chicago",
     description:
-      "Pick a time for appliance or HVAC service in Chicago and the surrounding areas. Residential and commercial customers welcome.",
+      "Request appliance or HVAC service in Chicago and the surrounding areas. Call or send the form and we come back with a time window.",
   },
   notFound: {
     title: "Page Not Found — USA Appliance & HVAC",

@@ -135,8 +135,8 @@ const routes: Route[] = [
     ...seo.book,
     priority: 0.9,
     changefreq: "monthly",
-    schema: [localBusinessSchema(), breadcrumbSchema([{ name: "Book Online", path: "/book" }])],
-    summary: [`Book appliance or HVAC service online, or call ${company.phone}.`],
+    schema: [localBusinessSchema(), breadcrumbSchema([{ name: "Request Service", path: "/book" }])],
+    summary: [`Request appliance or HVAC service, or call ${company.phone}.`],
   },
   {
     path: "/contact",

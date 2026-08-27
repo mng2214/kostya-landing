@@ -1,4 +1,4 @@
-import { CalendarCheck, ExternalLink, Phone } from "lucide-react";
+import { Clock3, PhoneCall } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { CallButton } from "@/components/CallButton";
 import { Reveal } from "@/components/Reveal";
@@ -37,17 +37,17 @@ export default function Book() {
               />
             </div>
           ) : (
-            <div className="mx-auto max-w-2xl rounded-[var(--radius-panel)] border border-black/[0.08] bg-surface p-8 text-center sm:p-12">
-              <span className="inline-flex size-14 items-center justify-center rounded-none bg-brand-50 text-brand-600">
-                <CalendarCheck className="size-6" aria-hidden="true" />
+            <div className="mx-auto max-w-2xl border border-black/[0.08] bg-surface p-8 text-center sm:p-12">
+              <span className="inline-flex size-14 items-center justify-center bg-brand-50 text-brand-600">
+                <PhoneCall className="size-6" aria-hidden="true" />
               </span>
               <h2 className="mt-6 text-[24px] font-semibold">
-                Online booking is being connected
+                Two ways to reach the crew
               </h2>
               <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-ink-muted">
-                The {booking.provider} scheduler goes live here shortly. Until
-                then, call and we will book you in directly — usually faster
-                than the form anyway.
+                Call and describe the fault — that is usually the fastest route
+                to a time window. Or send the form below and we come back to you
+                with one.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -55,13 +55,8 @@ export default function Book() {
               </div>
 
               <p className="mt-8 flex items-center justify-center gap-2 text-[13px] text-ink-muted">
-                <Phone className="size-3.5" aria-hidden="true" />
+                <Clock3 className="size-3.5" aria-hidden="true" />
                 {company.hours}
-              </p>
-
-              <p className="mt-6 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-ink-muted/60">
-                <ExternalLink className="size-3" aria-hidden="true" />
-                Set VITE_BOOKING_URL to activate
               </p>
             </div>
           )}
