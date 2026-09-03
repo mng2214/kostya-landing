@@ -34,7 +34,9 @@ export default function Contact() {
         <BookButton variant="solid" />
       </PageHero>
 
-      <ContactForm />
+      <div className="container-page py-16 lg:py-24">
+        <ContactForm />
+      </div>
 
       <section className="container-page pb-16">
         <Reveal>

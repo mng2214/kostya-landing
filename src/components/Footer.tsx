@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
-import { ArrowRight, Check, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { company, footer, serviceGroups } from "@/content";
 import { SocialIcon } from "./SocialIcon";
 
@@ -30,70 +29,16 @@ function Column({
   );
 }
 
-function Newsletter() {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        // Stub: no list is connected yet. Wire to your ESP here.
-        setDone(true);
-        setEmail("");
-        window.setTimeout(() => setDone(false), 4000);
-      }}
-      className="mt-6"
-    >
-      <label
-        htmlFor="newsletter-email"
-        className="mb-2.5 block text-[13px] font-semibold text-ink"
-      >
-        Sign up for our newsletter
-      </label>
-      <div className="flex items-center gap-2 rounded-[var(--radius-action)] border border-black/10 bg-white p-1.5 pl-5 focus-within:border-brand-500">
-        <input
-          id="newsletter-email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          className="h-12 min-w-0 flex-1 bg-transparent text-[16px] outline-none placeholder:text-ink-muted/60"
-        />
-        <button
-          type="submit"
-          aria-label="Subscribe"
-          className="inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white transition-colors hover:bg-brand-600"
-        >
-          {done ? (
-            <Check className="size-4" aria-hidden="true" />
-          ) : (
-            <ArrowRight className="size-4" aria-hidden="true" />
-          )}
-        </button>
-      </div>
-      <p
-        aria-live="polite"
-        className="mt-2 min-h-5 text-[12px] font-medium text-brand-600"
-      >
-        {done ? "Thanks — you're on the list." : ""}
-      </p>
-    </form>
-  );
-}
-
 export function Footer() {
   return (
     <footer className="bg-surface pt-16 pb-8">
       <div className="container-page">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <Logo className="[&_img]:h-11" />
+            <Logo className="items-start [&_img]:h-14" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-ink-muted">
               {footer.blurb}
             </p>
-            <Newsletter />
           </div>
 
           {footer.columns.map((col) => (
@@ -191,7 +136,12 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {company.name}. All rights reserved.
           </p>
-          <p>{company.hours}</p>
+          <div className="flex items-center gap-5">
+            <Link to="/privacy" className="transition-colors hover:text-brand-600">
+              Privacy Policy
+            </Link>
+            <p>{company.hours}</p>
+          </div>
         </div>
       </div>
     </footer>

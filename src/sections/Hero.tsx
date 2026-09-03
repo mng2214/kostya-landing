@@ -53,11 +53,11 @@ export function Hero() {
           delay={0.12}
           y={0}
           scale={0.98}
-          className="relative lg:-mr-[max(0px,calc((100vw-1240px)/2+2rem))]"
+          className="relative lg:-ml-16 lg:-mr-[max(0px,calc((100vw-1240px)/2+2rem))] lg:[mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.55)_8%,black_20%)]"
         >
           <Placeholder
             slot="hero-technician"
-            alt="A USA Appliance & HVAC technician testing a furnace control board with a multimeter in a Chicago basement"
+            alt="A USA Appliance & HVAC technician kneeling beside an open refrigerator in a bright Chicago kitchen, tools laid out beside him"
             priority
             label="Hero — technician portrait"
             ratio="4/3.6"

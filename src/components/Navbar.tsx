@@ -9,9 +9,27 @@ import { Logo } from "./Logo";
 import { BookButton } from "./BookButton";
 
 
+/*
+ * Nav items lean in slightly under the pointer.
+ *
+ * Two things keep the edges clean. The element is left uncomposited — no
+ * will-change, no translateZ — because a promoted layer is rasterised once at
+ * 1× and then stretched, which is precisely the soft, swollen text this is
+ * meant to avoid; painted normally, the browser re-renders the glyphs at the
+ * size they actually end up. And the scale is small: past roughly 1.08 even
+ * correctly rasterised type starts to read as a different weight.
+ *
+ * Transform costs no layout, so the neighbouring items never shift. The colour
+ * change is not wrapped in motion-safe — only the movement is.
+ */
+const HOVER_LIFT =
+  "transition-[color,scale] duration-[var(--dur-fast)] ease-[var(--ease-out-quint)] motion-safe:hover:scale-[1.06]";
+
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
-    "relative text-[15px] font-medium transition-colors",
+    // inline-block because a transform has no effect on an inline box.
+    "relative inline-block whitespace-nowrap text-[15px] font-medium",
+    HOVER_LIFT,
     isActive ? "text-brand-600" : "text-ink hover:text-brand-600",
   );
 
@@ -71,12 +89,12 @@ export function Navbar() {
             : "border-transparent",
         )}
       >
-        <div className="container-page flex h-[74px] items-center justify-between gap-6">
+        <div className="container-page flex h-[104px] items-center justify-between gap-4">
           <Logo />
 
-          <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
+          <nav aria-label="Main" className="hidden items-center gap-5 lg:flex xl:gap-7">
             {nav.map((item) => (
-              <NavLink key={item.to} to={item.to} className={linkClass}>
+              <NavLink key={item.to} to={item.to} end={item.to === "/"} className={linkClass}>
                 {item.label}
               </NavLink>
             ))}
@@ -88,7 +106,8 @@ export function Navbar() {
                 aria-expanded={dropdown}
                 aria-haspopup="true"
                 className={cn(
-                  "inline-flex items-center gap-1 text-[15px] font-medium transition-colors",
+                  "inline-flex items-center gap-1 text-[15px] font-medium",
+                  HOVER_LIFT,
                   isPagesActive || dropdown
                     ? "text-brand-600"
                     : "text-ink hover:text-brand-600",
@@ -140,7 +159,7 @@ export function Navbar() {
 
             <a
               href={company.phoneHref}
-              className="hidden h-12 items-center gap-2.5 whitespace-nowrap rounded-[var(--radius-action)] bg-brand-500 px-6 text-[15px] font-semibold text-white shadow-[0_6px_20px_-6px_rgba(34,64,156,0.45)] transition-all hover:bg-brand-600 active:scale-[0.98] lg:inline-flex"
+              className="hidden h-12 items-center gap-2.5 whitespace-nowrap rounded-[var(--radius-action)] bg-brand-500 px-6 text-[15px] font-semibold text-white shadow-[0_6px_20px_-6px_rgba(34,64,156,0.45)] transition-all hover:bg-brand-600 active:scale-[0.98] xl:inline-flex"
             >
               <Phone className="size-4" aria-hidden="true" />
               {company.phone}
@@ -151,7 +170,7 @@ export function Navbar() {
             <a
               href={company.phoneHref}
               aria-label={`Call ${company.phone}`}
-              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white shadow-[0_6px_20px_-8px_rgba(34,64,156,0.5)] transition-colors hover:bg-brand-600 lg:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] bg-brand-500 text-white shadow-[0_6px_20px_-8px_rgba(34,64,156,0.5)] transition-colors hover:bg-brand-600 xl:hidden"
             >
               <Phone className="size-[18px]" aria-hidden="true" />
             </a>
@@ -205,6 +224,7 @@ export function Navbar() {
                   <NavLink
                     key={item.to}
                     to={item.to}
+                    end={item.to === "/"}
                     className={({ isActive }) =>
                       cn(
                         "rounded-none px-4 py-3 text-[17px] font-medium transition-colors",

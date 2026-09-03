@@ -1,0 +1,108 @@
+TODO — USA Appliance & HVAC
+
+
+0. COMMIT AND DEPLOY FIRST
+   78 changed files, last commit is 6 days old. None of the recent work is
+   live. Production still has no privacy policy.
+
+
+1. REPLACE THE PHOTOS                                          [client]
+
+   All photos are white "YOUR IMAGE HERE" placeholders.
+
+   Folder: src/assets/photos/
+   How:    save your photo over the existing file, keep the name.
+           Nothing else to do. The size is in the filename.
+           Match the shape — images are cropped to fill, so a wide photo
+           in a tall slot loses its sides.
+
+     hero-technician__1800x1620.jpg              home, big photo
+
+     help-refrigerator__900x675.jpg              home cards, phone
+     help-washer-dryer__900x675.jpg
+     help-dishwasher__900x675.jpg
+     help-oven-range__900x675.jpg
+     help-hvac__900x675.jpg
+     help-installation__900x675.jpg
+
+     service-refrigerator-repair__1000x1250.jpg  home panels, desktop
+     service-washer-dryer-repair__1000x1250.jpg  (same six subjects,
+     service-dishwasher-repair__1000x1250.jpg     just a taller crop)
+     service-oven-stove-repair__1000x1250.jpg
+     service-air-conditioning-repair__1000x1250.jpg
+     service-heating-furnace-repair__1000x1250.jpg
+
+     about-crew__800x1067.jpg                    about block, left
+     about-van__800x1067.jpg                     about block, right
+
+   Separate file, different folder:
+
+     public/og-cover.jpg — 1200 x 630
+     Shown when the site is shared in WhatsApp, Messenger, Facebook.
+     Keep this exact filename. Replace before running ads.
+
+   Leave alone: why-us-chicago.jpg, the favicons, the logo.
+
+
+2. GOOGLE ANALYTICS + CONVERSION TRACKING                   [developer]
+
+   Nothing is installed today.
+
+   a) Add the Google tag to index.html, in <head>.
+
+   b) Form conversions — two files cover every form on the site:
+        src/lib/leads.ts      service request form
+        src/lib/callback.ts   "Request a Call" modal
+      Fire only on success. Both already return { ok: true }.
+
+   c) Phone clicks — the main lead channel, currently uncounted.
+      Nine components render a tel: link. Do not touch nine files: use one
+      delegated listener on document for a[href^="tel:"].
+
+   d) SAME COMMIT: update the privacy policy. src/content.ts, `privacy`,
+      the Cookies section says "This site sets no advertising or analytics
+      cookies." That becomes false the moment the tag goes live.
+      Also consider a cookie banner if you advertise to the EU.
+
+
+3. CONFIRM THE FACTS                                            [owner]
+
+   Seven TODO(real-data) markers in src/content.ts. Some go into
+   schema.org, so a wrong answer is told to Google:
+
+     line  25   opening hours, emergency availability
+     line  65   "7+ years" and the other two home page figures
+     line 562   Google Business Profile place_id (until set, the reviews
+                block renders nothing on purpose)
+     line 752   street address — leave empty, this is a service-area business
+     line 760   opening hours again
+     line 768   founded: 2019 — confirm
+
+   Ad copy has to be defensible too. Settle these before ads run.
+
+
+4. LEGAL ENTITY NAME                                            [owner]
+
+   src/content.ts, `privacy`, field `entity`. Says "USA Appliance & HVAC".
+   If there is a registered LLC, put its name there.
+
+   The policy was written from what the code actually does. It has not
+   been reviewed by a lawyer — worth doing before ads.
+
+
+5. STALE DOCS                                               [developer]
+
+   These describe a site that no longer exists:
+     PHOTOS.md    old photo workflow, deleted slots, old filenames
+     SEO.md       "each service page" (removed), /packages (never existed)
+     HANDOVER.md  old photo list, "status as of 27.08"
+
+   images/README.md is current. Use it as the reference.
+
+
+6. CHECK ON A REAL PHONE                                    [developer]
+
+   src/lib/useScrollHint.ts — the home page card strip nudges sideways
+   once on first view, to show it swipes. The logic is guarded but the
+   motion was never actually watched: the dev preview pane was not
+   painting, which freezes requestAnimationFrame.

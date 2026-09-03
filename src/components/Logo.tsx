@@ -3,13 +3,13 @@ import mark from "@/assets/brand/logo-mark.png";
 import { cn } from "@/lib/utils";
 
 /**
- * Header/footer lockup.
+ * Header/footer lockup — stacked, matching the original artwork.
  *
- * The supplied logo is a stacked square: at a 74px header height the whole
- * thing would shrink to ~40px and "APPLIANCE & HVAC" would be about four
- * pixels tall — unreadable. So the monogram is used as the mark and the
- * descriptor is set live in Archivo beside it, which stays crisp at any size
- * and gives the horizontal lockup the header actually needs.
+ * The supplied logo puts "APPLIANCE & HVAC" under the monogram, so the lockup
+ * does the same. The descriptor is set live in Archivo rather than cropped
+ * from the image: at header size the artwork's own wordmark renders about five
+ * pixels tall and turns to mush, while type stays crisp at any size and can be
+ * tracked out to match the width of the mark above it.
  */
 export function Logo({
   className,
@@ -22,35 +22,35 @@ export function Logo({
     <Link
       to="/"
       aria-label="USA Appliance & HVAC — home"
-      className={cn("group inline-flex min-h-11 shrink-0 items-center gap-2.5", className)}
+      className={cn(
+        // Nudged up: the descriptor line sits under the mark, so optically the
+        // lockup's centre is lower than its bounding box centre, and row
+        // centring alone leaves it sitting heavy.
+        "group inline-flex shrink-0 -translate-y-[3px] flex-col items-center",
+        className,
+      )}
     >
-      {/*
-        The swoosh occupies the top third of the artwork, so centring the whole
-        image drops the "USA" letters well below the descriptor. Measured: the
-        letter band sits below the image centre. A percentage translate is
-        used so the nudge scales with h-9 / h-10 instead of being pinned to a
-        fixed pixel value.
-      */}
       <img
         src={mark}
         alt=""
         width={361}
         height={240}
-        className="h-9 w-auto -translate-y-[23%] sm:h-10"
+        className="h-12 w-auto sm:h-[68px]"
       />
       <span
         className={cn(
-          "hidden text-[11px] uppercase leading-tight sm:block",
-          tone === "light" ? "text-white/70" : "text-ink-muted",
+          "mt-1.5 whitespace-nowrap text-[9px] uppercase leading-none sm:text-[10px]",
+          tone === "light" ? "text-white/75" : "text-ink",
         )}
         style={{
           fontVariationSettings: '"wdth" 104, "wght" 700',
-          letterSpacing: "0.14em",
+          // Tracked out so the descriptor spans the width of the mark above it,
+          // which is what makes a stacked lockup read as one object.
+          letterSpacing: "0.13em",
+          textIndent: "0.13em",
         }}
       >
-        Appliance
-        <br />
-        &amp; HVAC
+        Appliance &amp; HVAC
       </span>
     </Link>
   );

@@ -5,32 +5,22 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { Reveal } from "@/components/Reveal";
 import { ServiceIcon } from "@/components/ServiceIcon";
 import { photoUrl } from "@/lib/photos";
-import { serviceGroups } from "@/content";
+import { HelpCards } from "@/sections/HelpCards";
+import { helpWith } from "@/content";
 import { cn } from "@/lib/utils";
 
 /**
- * Expanding photo panels, one per service category.
+ * Expanding photo panels — the desktop view of the service list.
  *
- * Desktop: panels share a row and the active one takes most of the width.
- * Mobile: the expansion is meaningless without a pointer, so it degrades to a
- * plain stack of cards — same markup, same links, no gesture to discover.
+ * Hidden below lg, where its companion card grid takes over: the expansion is
+ * driven by hover, and a phone has none. Both views read the same array, so
+ * the two can never disagree about what the company repairs.
  *
  * On smoothness: `flex-grow` is the one property here that forces layout every
- * frame, so everything else is kept off the layout path — the detail block
- * fades and lifts instead of animating its height (`grid-rows: 0fr→1fr` is
- * another per-frame layout pass), and the image uses a small scale delta.
- * All of it shares one curve and one duration so nothing arrives out of step.
- *
- * Photography is reused from the service slots rather than duplicated, so this
- * section adds no extra bytes to the bundle.
+ * frame, so everything else stays off the layout path — the detail block fades
+ * rather than animating its height, and the image uses a small scale delta.
+ * One curve, one duration, so nothing arrives out of step.
  */
-const PANEL_PHOTO: Record<string, string> = {
-  "appliance-repair": "service-dishwasher-repair",
-  "hvac-services": "service-air-conditioning-repair",
-  installation: "service-heating-furnace-repair",
-  "commercial-services": "service-commercial",
-};
-
 const EASE = "var(--ease-out-quint)";
 
 export function ServiceSelector() {
@@ -40,29 +30,34 @@ export function ServiceSelector() {
     <section className="bg-surface-alt py-16 lg:py-24">
       <div className="container-page">
         <Reveal>
-          <Eyebrow>Our services</Eyebrow>
+          <Eyebrow>{helpWith.kicker}</Eyebrow>
           <h2 className="type-title mt-5 max-w-2xl text-[32px] sm:text-[42px]">
-            Appliance and HVAC service, residential and commercial
+            {helpWith.title}
           </h2>
+          <p className="mt-5 max-w-[56ch] text-[16px] leading-relaxed text-ink-muted">
+            {helpWith.body}
+          </p>
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <div className="mt-12 flex flex-col gap-4 lg:h-[520px] lg:flex-row lg:gap-3">
-            {serviceGroups.map((group, i) => {
+        {/* Touch has no hover, so the panels give way to plain cards. */}
+        <HelpCards />
+
+        <Reveal delay={0.08} className="hidden lg:block">
+          <div className="mt-12 flex h-[520px] flex-row gap-3">
+            {helpWith.items.map((item, i) => {
               const isActive = active === i;
-              const photo = photoUrl(PANEL_PHOTO[group.slug] ?? "");
+              const photo = photoUrl(item.panelSlot ?? "");
 
               return (
                 <Link
-                  key={group.slug}
-                  to={`/${group.slug}`}
+                  key={item.title}
+                  to={item.to}
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
-                  aria-label={`${group.title} — ${group.short}`}
+                  aria-label={`${item.title} — ${item.note}`}
                   className={cn(
-                    "group relative isolate flex overflow-hidden rounded-[var(--radius-panel)]",
-                    "h-56 lg:h-full",
-                    isActive ? "lg:grow-[4]" : "lg:grow",
+                    "group relative isolate flex h-full overflow-hidden",
+                    isActive ? "grow-[4]" : "grow",
                   )}
                   style={{
                     flexBasis: 0,
@@ -81,7 +76,8 @@ export function ServiceSelector() {
                       className="absolute inset-0 -z-10 size-full object-cover motion-reduce:transform-none"
                       style={{
                         transform: isActive ? "scale(1)" : "scale(1.04)",
-                        transitionProperty: "transform",
+                        filter: isActive ? "saturate(1.08)" : "saturate(0.95)",
+                        transitionProperty: "transform, filter",
                         transitionDuration: "var(--dur-slow)",
                         transitionTimingFunction: EASE,
                       }}
@@ -99,8 +95,8 @@ export function ServiceSelector() {
                     className={cn(
                       "absolute inset-0 -z-10 bg-gradient-to-t",
                       isActive
-                        ? "from-ink/85 via-ink/35 to-ink/10"
-                        : "from-ink/90 via-ink/70 to-ink/50",
+                        ? "from-ink/80 via-ink/20 to-transparent"
+                        : "from-ink/85 via-ink/45 to-ink/20",
                     )}
                     style={{
                       transitionProperty: "opacity",
@@ -110,20 +106,14 @@ export function ServiceSelector() {
                   />
 
                   {/*
-                    Collapsed panels are ~104px wide inside their padding —
-                    narrower than the word "Commercial" at this size, so a
-                    horizontal heading simply got clipped. Collapsed state runs
-                    the title vertically instead, which is the honest fix: the
-                    full name stays readable at any panel width.
-
-                    Two layers crossfade rather than one layer switching
-                    writing-mode, because writing-mode cannot animate and would
-                    snap halfway through the expansion.
+                    A collapsed panel is far narrower than its title, so the
+                    title runs vertically there. Two layers crossfade because
+                    writing-mode cannot animate and would snap mid-expansion.
                   */}
                   <div
                     aria-hidden={isActive}
                     className={cn(
-                      "absolute inset-0 hidden flex-col justify-between p-7 text-white lg:flex",
+                      "absolute inset-0 flex flex-col justify-between p-6 text-white",
                       isActive ? "opacity-0" : "opacity-100",
                     )}
                     style={{
@@ -132,22 +122,21 @@ export function ServiceSelector() {
                       transitionTimingFunction: EASE,
                     }}
                   >
-                    <span className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] bg-white/15 backdrop-blur-[2px]">
-                      <ServiceIcon name={group.icon} className="size-5" />
+                    <span className="inline-flex size-10 items-center justify-center bg-white/15 backdrop-blur-[2px]">
+                      <ServiceIcon name={item.icon} className="size-[18px]" />
                     </span>
-
                     <span
-                      className="whitespace-nowrap text-[20px] leading-none [writing-mode:vertical-rl] rotate-180"
+                      className="whitespace-nowrap text-[18px] leading-none [writing-mode:vertical-rl] rotate-180"
                       style={{ fontVariationSettings: '"wdth" 110, "wght" 700' }}
                     >
-                      {group.title}
+                      {item.title}
                     </span>
                   </div>
 
                   <div
                     className={cn(
-                      "relative flex w-full flex-col justify-end p-6 text-white lg:p-7",
-                      isActive ? "lg:opacity-100" : "lg:opacity-0",
+                      "relative flex w-full flex-col justify-end p-7 text-white",
+                      isActive ? "opacity-100" : "opacity-0",
                     )}
                     style={{
                       transitionProperty: "opacity",
@@ -155,34 +144,22 @@ export function ServiceSelector() {
                       transitionTimingFunction: EASE,
                     }}
                   >
-                    <span className="inline-flex size-11 items-center justify-center rounded-[var(--radius-action)] bg-white/15 backdrop-blur-[2px] lg:hidden">
-                      <ServiceIcon name={group.icon} className="size-5" />
+                    <span className="inline-flex size-11 items-center justify-center bg-white/15 backdrop-blur-[2px]">
+                      <ServiceIcon name={item.icon} className="size-5" />
                     </span>
 
                     <h3
-                      className="mt-5 text-[20px] leading-tight lg:mt-0 lg:text-[22px]"
+                      className="mt-5 text-[24px] leading-tight"
                       style={{ fontVariationSettings: '"wdth" 110, "wght" 700' }}
                     >
-                      {group.title}
+                      {item.title}
                     </h3>
-
-                    <div className="lg:grid lg:grid-rows-[1fr]">
-                      <div className="lg:overflow-hidden">
-                        <p className="mt-3 max-w-[38ch] text-[15px] leading-relaxed text-white/75">
-                          {group.short}
-                        </p>
-                        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5">
-                          {group.services.slice(0, 4).map((s) => (
-                            <li key={s.slug} className="text-[13px] text-white/60">
-                              {s.title}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+                    <p className="mt-3 max-w-[34ch] text-[15px] leading-relaxed text-white/75">
+                      {item.note}
+                    </p>
 
                     <span className="mt-5 inline-flex items-center gap-1.5 whitespace-nowrap text-[14px] font-semibold">
-                      View services
+                      Learn more
                       <ArrowUpRight className="size-4" aria-hidden="true" />
                     </span>
                   </div>

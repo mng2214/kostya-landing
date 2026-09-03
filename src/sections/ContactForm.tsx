@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AlertCircle, CheckCircle2, Clock, Loader2, MapPin, Phone } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { allServices, company, contactSection } from "@/content";
+import { FormConsent } from "@/components/FormConsent";
 import { submitLead, type Lead } from "@/lib/leads";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +69,7 @@ export function ContactForm() {
       : "border-black/12 focus:border-brand-500";
 
   return (
-    <section id="contact" className="container-page py-16 lg:py-24">
+    <section id="contact" className="w-full">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
         <Reveal>
           <h2 className="type-title text-[32px] sm:text-[42px] max-w-sm">{contactSection.title}</h2>
@@ -262,9 +263,10 @@ export function ContactForm() {
                   )}
                 </button>
 
-                <p className="text-center text-[12px] text-ink-muted">
-                  No spam, no call centre. We reply from a real inbox.
-                </p>
+                <FormConsent
+                  note="No spam, no call centre. We reply from a real inbox."
+                  action="sending this request"
+                />
               </form>
             )}
           </div>

@@ -11,8 +11,8 @@ import AboutPage from "@/pages/AboutPage";
 import ServiceCategory from "@/pages/ServiceCategory";
 import ServiceAreas from "@/pages/ServiceAreas";
 import Book from "@/pages/Book";
-import ServiceDetail from "@/pages/ServiceDetail";
 import Contact from "@/pages/Contact";
+import Privacy from "@/pages/Privacy";
 import NotFound from "@/pages/NotFound";
 
 export default function App() {
@@ -35,8 +35,8 @@ export default function App() {
           <Route path="/service-areas" element={<ServiceAreas />} />
           <Route path="/book" element={<Book />} />
           <Route path="/:group" element={<ServiceCategory />} />
-          <Route path="/:group/:slug" element={<ServiceDetail />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

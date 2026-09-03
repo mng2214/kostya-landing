@@ -63,7 +63,9 @@ export default function Book() {
         </Reveal>
       </section>
 
-      <ContactForm />
+      <div className="container-page py-16 lg:py-24">
+        <ContactForm />
+      </div>
       <Faq />
       <FinalCta />
     </>

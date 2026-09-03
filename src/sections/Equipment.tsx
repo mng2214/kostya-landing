@@ -30,7 +30,7 @@ export function Equipment() {
                 "group relative flex h-full flex-col bg-white p-7",
                 // Scale from the block's own centre, lifted a touch. Kept to
                 // 1.02 — anything more and the text visibly resamples.
-                "motion-safe:transition-[transform,background-color,box-shadow]",
+                "motion-safe:transition-[translate,scale,background-color,box-shadow]",
                 "motion-safe:duration-[var(--dur-base)] motion-safe:ease-[var(--ease-out-quint)]",
                 "hover:z-10 hover:bg-surface motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.02]",
                 "hover:shadow-[0_24px_50px_-30px_rgba(0,0,0,0.45)]",

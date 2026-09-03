@@ -7,7 +7,6 @@ import {
   serviceAreaTowns,
   serviceGroups,
   site,
-  type Service,
 } from "@/content";
 
 const ID = `${site.url}/#business`;
@@ -62,7 +61,6 @@ export function localBusinessSchema() {
           "@type": "Service",
           name: s.title,
           description: s.short,
-          ...(s.hasPage ? { url: `${site.url}/${s.groupSlug}/${s.slug}` } : {}),
         },
       })),
     },
@@ -98,31 +96,6 @@ export function websiteSchema() {
     name: company.name,
     publisher: { "@id": ID },
     inLanguage: "en-US",
-  };
-}
-
-export function serviceSchema(service: Service, groupSlug: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: service.title,
-    description: service.short,
-    url: `${site.url}/${groupSlug}/${service.slug}`,
-    serviceType: service.title,
-    provider: { "@id": ID },
-    areaServed: serviceAreaTowns.map((name) => ({ "@type": "City", name })),
-    ...(service.includes?.length
-      ? {
-          hasOfferCatalog: {
-            "@type": "OfferCatalog",
-            name: `${service.title} — what we handle`,
-            itemListElement: service.includes.map((item) => ({
-              "@type": "Offer",
-              itemOffered: { "@type": "Service", name: item },
-            })),
-          },
-        }
-      : {}),
   };
 }
 

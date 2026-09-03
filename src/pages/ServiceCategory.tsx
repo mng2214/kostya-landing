@@ -56,7 +56,7 @@ export default function ServiceCategory() {
           <Reveal delay={0.08}>
             <div className="grid gap-4 sm:grid-cols-2">
               {group.services.map((s) => (
-                <ServiceRow key={s.slug} service={s} groupSlug={group.slug} />
+                <ServiceRow key={s.slug} service={s} />
               ))}
             </div>
           </Reveal>

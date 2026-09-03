@@ -76,6 +76,19 @@
   }
 
   /*
+   * A swipe strip carries its own affordance — the next card cut off at the
+   * screen edge. A scrollbar under it adds nothing and shifts the layout on
+   * the platforms that reserve space for one.
+   */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
    * Display type: same family, pushed wide and heavy. Structural and a little
    * industrial — signage, not brochure.
    */

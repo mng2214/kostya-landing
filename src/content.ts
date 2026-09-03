@@ -33,6 +33,7 @@ export const company = {
 } as const;
 
 export const nav = [
+  { label: "Home", to: "/" },
   { label: "Appliance Repair", to: "/appliance-repair" },
   { label: "HVAC Services", to: "/hvac-services" },
   { label: "Installation", to: "/installation" },
@@ -123,10 +124,6 @@ export type Service = {
   title: string;
   short: string;
   icon: string;
-  /** Services with a page of their own; the rest live on the category page. */
-  hasPage?: boolean;
-  body?: string[];
-  includes?: string[];
 };
 
 export type ServiceGroup = {
@@ -162,18 +159,6 @@ export const serviceGroups: ServiceGroup[] = [
         title: "Refrigerator and freezer repair",
         short: "Cooling failures, leaks, noisy compressors and failed defrost cycles.",
         icon: "refrigerator",
-        hasPage: true,
-        body: [
-          "A refrigerator that stops holding temperature is the one repair that cannot wait — the cost of the food inside often exceeds the cost of the visit.",
-          "Most cooling failures come down to a handful of causes: a failed start relay or compressor, a blocked defrost cycle icing the evaporator, dirty condenser coils, or a door seal that no longer closes. All four are diagnosable on site.",
-        ],
-        includes: [
-          "Not cooling or cooling intermittently",
-          "Ice build-up in the freezer compartment",
-          "Water pooling under or inside the unit",
-          "Compressor, start relay and thermostat faults",
-          "Door seal replacement and alignment",
-        ],
       },
       {
         slug: "ice-maker-repair",
@@ -186,54 +171,18 @@ export const serviceGroups: ServiceGroup[] = [
         title: "Washer and dryer repair",
         short: "Drainage, drum, bearing, heating and vent problems.",
         icon: "washing-machine",
-        hasPage: true,
-        body: [
-          "Washers and dryers fail in predictable ways, and most of those failures are worth repairing well before the machine is worth replacing.",
-          "A dryer that runs but does not heat is usually an element or thermal fuse. A washer that will not drain is usually a pump or a blocked filter. Neither justifies a new machine.",
-        ],
-        includes: [
-          "Washer will not drain or spin",
-          "Drum bearing noise and vibration",
-          "Dryer runs but does not heat",
-          "Dryer vent cleaning and airflow",
-          "Door latch, lid switch and control faults",
-        ],
       },
       {
         slug: "dishwasher-repair",
         title: "Dishwasher repair",
         short: "Leaks, poor cleaning, drainage faults and pump failures.",
         icon: "utensils",
-        hasPage: true,
-        body: [
-          "A dishwasher that leaks is doing quiet damage to the cabinet and floor underneath it long before the puddle reaches the room.",
-          "Poor cleaning results are rarely the detergent. More often it is a blocked spray arm, a failing circulation pump, or an inlet valve that is not filling the machine properly.",
-        ],
-        includes: [
-          "Leaking from the door or underneath",
-          "Dishes coming out dirty or filmed",
-          "Not draining at the end of the cycle",
-          "Circulation and drain pump replacement",
-          "Inlet valve and float switch faults",
-        ],
       },
       {
         slug: "oven-stove-repair",
         title: "Oven, stove, range and cooktop repair",
         short: "Heating faults, ignition problems, controls and burners.",
         icon: "cooking-pot",
-        hasPage: true,
-        body: [
-          "Cooking equipment failures fall into two groups: it does not heat, or it does not heat accurately. The second is the one people live with for months without realising it.",
-          "Gas and electric, freestanding and built-in, including induction cooktops and wall ovens.",
-        ],
-        includes: [
-          "Oven not reaching or holding temperature",
-          "Burner will not ignite or clicks continuously",
-          "Bake and broil element replacement",
-          "Control board and thermostat calibration",
-          "Induction and glass cooktop faults",
-        ],
       },
       {
         slug: "appliance-installation",
@@ -265,36 +214,12 @@ export const serviceGroups: ServiceGroup[] = [
         title: "Air conditioning repair",
         short: "Weak airflow, short cycling, refrigerant leaks and failed compressors.",
         icon: "wind",
-        hasPage: true,
-        body: [
-          "An air conditioner that needs refrigerant every summer does not need refrigerant — it has a leak. Topping it up annually is a subscription to a problem, not a repair.",
-          "Weak airflow and short cycling are usually inexpensive to fix and expensive to ignore, because both make the compressor work harder than it was designed to.",
-        ],
-        includes: [
-          "Refrigerant leak detection and repair",
-          "Condenser and compressor service",
-          "Capacitor and contactor replacement",
-          "Evaporator coil cleaning",
-          "Thermostat diagnosis and replacement",
-        ],
       },
       {
         slug: "heating-furnace-repair",
         title: "Heating and furnace repair",
         short: "No heat, ignition faults, blower problems and safety checks.",
         icon: "flame",
-        hasPage: true,
-        body: [
-          "Chicago winters are unforgiving on older equipment, and a no-heat call in January is an emergency rather than an inconvenience.",
-          "Most no-heat failures trace to the ignitor, the flame sensor, the inducer motor or a control board — all repairable, all much cheaper than a replacement furnace.",
-        ],
-        includes: [
-          "No heat or intermittent heating",
-          "Hot-surface ignitor and flame sensor",
-          "Inducer and blower motor replacement",
-          "Control board diagnosis",
-          "Combustion and safety inspection",
-        ],
       },
       {
         slug: "hvac-installation",
@@ -392,13 +317,82 @@ export const allServices: Array<Service & { group: string; groupSlug: string }> 
     g.services.map((s) => ({ ...s, group: g.title, groupSlug: g.slug })),
   );
 
-/** Services that get a page of their own, rather than a card on a category page. */
-export const pagedServices = allServices.filter((s) => s.hasPage);
-
 /**
  * Equipment we service. Kept explicit because "all appliances" answers nothing
  * — a visitor is looking for their specific machine.
  */
+/**
+ * The service list — one source, two presentations.
+ *
+ * Desktop gets the expanding photo panels; touch gets these as cards with
+ * product shots, because the panels rely on hover and have nothing to respond
+ * to on a phone. Keeping both views on one array is the point: two lists would
+ * drift apart the first time someone edits only one of them.
+ *
+ * "What can we help you with?"
+ *
+ * Added at the owner's request, for a concrete reason: customers assume the
+ * crew only fixes washers and ring up to ask what else is covered. Six named
+ * machines answer that before the phone call happens.
+ *
+ * Every entry points at a page that exists — no dead cards.
+ */
+export const helpWith = {
+  kicker: "Our services",
+  title: "What can we help you with?",
+  body: "If your machine is not on this list, call and ask — the answer is usually yes.",
+  items: [
+    {
+      title: "Refrigerator & freezer repair",
+      slot: "help-refrigerator",
+      panelSlot: "service-refrigerator-repair",
+      note: "Not cooling, icing up, leaking",
+      icon: "refrigerator",
+      to: "/appliance-repair/refrigerator-repair",
+    },
+    {
+      title: "Washer & dryer repair",
+      slot: "help-washer-dryer",
+      panelSlot: "service-washer-dryer-repair",
+      note: "Will not drain, spin or heat",
+      icon: "washing-machine",
+      to: "/appliance-repair/washer-dryer-repair",
+    },
+    {
+      title: "Dishwasher repair",
+      slot: "help-dishwasher",
+      panelSlot: "service-dishwasher-repair",
+      note: "Leaks, poor cleaning, drainage",
+      icon: "utensils",
+      to: "/appliance-repair/dishwasher-repair",
+    },
+    {
+      title: "Oven, stove & range repair",
+      slot: "help-oven-range",
+      panelSlot: "service-oven-stove-repair",
+      note: "No heat, ignition, controls",
+      icon: "cooking-pot",
+      to: "/appliance-repair/oven-stove-repair",
+    },
+    {
+      title: "HVAC repair & maintenance",
+      slot: "help-hvac",
+      panelSlot: "service-air-conditioning-repair",
+      note: "Furnaces, A/C, mini-splits",
+      icon: "wind",
+      to: "/hvac-services",
+    },
+    {
+      title: "Installation services",
+      slot: "help-installation",
+      panelSlot: "service-heating-furnace-repair",
+      note: "Appliances, heating, cooling",
+      icon: "hard-hat",
+      to: "/installation",
+    },
+  ],
+};
+
 export const equipmentServiced = {
   title: "Appliances and HVAC systems we service",
   groups: [
@@ -591,6 +585,117 @@ export const booking = {
   provider: "Housecall Pro",
 } as const;
 
+/**
+ * Privacy policy.
+ *
+ * Written from what the code actually does, not from a template: every
+ * recipient named below is a service the site really calls — Formspree in
+ * `lib/forms.ts`, Crisp in `lib/crisp.ts`, the Google Fonts stylesheet in
+ * index.html, and Vercel as the host. If an integration is added or dropped,
+ * this text is part of the change.
+ *
+ * There is deliberately no claim of GDPR or CCPA compliance and no invented
+ * retention period. Saying less and meaning it is worth more than a longer
+ * document that turns out to be false.
+ *
+ * TODO(legal): if the business is registered as an LLC, put the registered
+ * name in `entity` — a policy naming the wrong controller is worse than none.
+ * TODO(analytics): analytics and advertising tags are not installed today, and
+ * the "Cookies" section says so. Update this text in the same commit that adds
+ * them, not after.
+ */
+export const privacy = {
+  updated: "September 2, 2026",
+  entity: company.name,
+  intro:
+    "This page explains what information USA Appliance & HVAC collects when you use this website, why we collect it, and who else sees it. We are a small service company in Chicago — we collect what we need to answer you and do the work, and nothing else.",
+  sections: [
+    {
+      heading: "Information you give us",
+      body: [
+        "You only give us information when you choose to contact us. Nothing on this site requires an account, and there is nothing to sign up for.",
+      ],
+      list: [
+        "Service request form: your name, email address, phone number, the service you need and your message.",
+        "Request a call: your name, phone number and the time of day you prefer to be called.",
+        "Live chat: whatever you type into the chat window, and any contact details you give there.",
+        "Calling or emailing us directly: your phone number or email address and what you tell us.",
+      ],
+    },
+    {
+      heading: "Information collected automatically",
+      body: [
+        "Like any website, this one leaves traces even if you never contact us.",
+      ],
+      list: [
+        "Our hosting provider records standard server logs: IP address, browser and device type, the pages requested and when.",
+        "The live chat widget stores a small identifier in your browser so a conversation survives a page reload, and its provider sees your IP address and browser details.",
+        "Fonts are loaded from Google's font service, which means Google receives your IP address when a page loads.",
+      ],
+    },
+    {
+      heading: "How we use it",
+      body: [
+        "To reply to you, quote and schedule the work, carry it out, and keep ordinary records of jobs we have done. We also use it to reach you about an appointment already arranged.",
+        "We do not send marketing email or text messages, and we do not add you to a mailing list.",
+      ],
+    },
+    {
+      heading: "Who else sees it",
+      body: [
+        "We do not sell or rent personal information, and we do not share it for anyone else's advertising. It reaches other companies only because they run parts of this site on our behalf:",
+      ],
+      list: [
+        "Formspree — delivers the forms on this site to our email inbox.",
+        "Crisp — provides the live chat window.",
+        "Vercel — hosts the site and serves its pages.",
+        "Google Fonts — serves the typeface the site is set in.",
+      ],
+      after: [
+        "Each of those companies handles data under its own privacy terms. We may also disclose information where the law requires it.",
+      ],
+    },
+    {
+      heading: "Cookies",
+      body: [
+        "This site sets no advertising or analytics cookies. The only browser storage in use belongs to the live chat, which needs it to keep a conversation open across page loads.",
+        "You can block or clear cookies in your browser settings; the chat will simply start fresh each time. If we add analytics or advertising tags later, this page will be updated before they go live.",
+      ],
+    },
+    {
+      heading: "How long we keep it",
+      body: [
+        "We keep enquiries and job records for as long as we need them to serve you and to keep normal business and tax records. Information held inside the services listed above is also subject to their own retention.",
+        "If you want your details removed sooner, email us and we will delete what we are not required to keep.",
+      ],
+    },
+    {
+      heading: "Your choices",
+      body: [
+        "You can ask us what we hold about you, ask us to correct it, or ask us to delete it. Email or call using the details below and we will respond. Depending on where you live you may have further rights under local law; tell us and we will honour them.",
+      ],
+    },
+    {
+      heading: "Children",
+      body: [
+        "This site is meant for adults arranging appliance and HVAC work. We do not knowingly collect information from children under 13.",
+      ],
+    },
+    {
+      heading: "Security",
+      body: [
+        "The site is served over HTTPS and we limit who can read the enquiries that reach us. No website can promise perfect security, and we will not pretend otherwise.",
+      ],
+    },
+    {
+      heading: "Changes",
+      body: [
+        "If this policy changes, the date at the top of the page changes with it. Material changes will be described here rather than made quietly.",
+      ],
+    },
+  ],
+};
+
 export const site = {
   /*
    * The apex is canonical.
@@ -703,6 +808,11 @@ export const advantages = [
 
 /** Per-route metadata. Titles stay under ~60 chars, descriptions under ~155. */
 export const seo = {
+  privacy: {
+    title: "Privacy Policy — USA Appliance & HVAC",
+    description:
+      "What information USA Appliance & HVAC collects on this website, why, and who else sees it. No tracking, no marketing lists.",
+  },
   home: {
     title: "Appliance & HVAC Repair in Chicago — USA Appliance & HVAC",
     description:

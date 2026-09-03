@@ -1,4 +1,6 @@
 import { company } from "@/content";
+import { useOpenState } from "@/lib/useOpenState";
+import { cn } from "@/lib/utils";
 import { SocialIcon } from "./SocialIcon";
 
 /**
@@ -26,13 +28,30 @@ function Diamond() {
 }
 
 export function TopBar() {
+  const hours = useOpenState();
+
   return (
     <div className="hidden border-b border-black/[0.06] bg-white text-[13px] text-ink-muted lg:block">
       <div className="container-page flex h-11 items-center justify-between">
         <p className="flex items-center">
           <span>{company.address}</span>
           <Diamond />
-          <span>{company.hours}</span>
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={cn(
+                "relative inline-flex size-1.5 shrink-0 rounded-full",
+                hours.open ? "bg-emerald-500" : "bg-ink-muted/40",
+              )}
+            >
+              {hours.open && (
+                <span className="status-pulse absolute inset-0 rounded-full bg-emerald-500" />
+              )}
+            </span>
+            <span className="text-ink">{hours.label}</span>
+            <span className="text-ink-muted">· {hours.detail}</span>
+          </span>
+          <Diamond />
+          <span>Licensed &amp; insured in Illinois</span>
         </p>
 
         <ul className="flex items-center gap-4">

@@ -5,6 +5,7 @@ import { breadcrumbSchema, faqSchema, localBusinessSchema } from "@/lib/schema";
 import { PageHero } from "@/components/PageHero";
 import { About } from "@/sections/About";
 import { Process } from "@/sections/Process";
+import { Equipment } from "@/sections/Equipment";
 import { WhyUs } from "@/sections/WhyUs";
 import { GoogleReviews } from "@/sections/GoogleReviews";
 import { Faq } from "@/sections/Faq";
@@ -32,6 +33,7 @@ export default function AboutPage() {
       />
       <About />
       <WhyUs />
+      <Equipment />
       <Process />
       <GoogleReviews />
       <Faq />

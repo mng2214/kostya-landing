@@ -26,6 +26,7 @@ import {
   process as processContent,
   seo,
   serviceAreaTowns,
+  privacy,
   serviceGroups,
   site,
   whyUs,
@@ -35,7 +36,6 @@ import {
   faqSchema,
   localBusinessSchema,
   serviceGroupSchema,
-  serviceSchema,
   websiteSchema,
 } from "../src/lib/schema";
 
@@ -44,9 +44,6 @@ const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /** Kept under 160 chars so search results don't truncate mid-sentence. */
-export function serviceDescription(s: Service) {
-  return `${s.short} Rolling Meadows, Arlington Heights & the NW Chicago suburbs. From ${s.priceFrom}.`;
-}
 
 type Route = {
   path: string;
@@ -105,23 +102,6 @@ const routes: Route[] = [
       `Includes: ${g.services.map((x) => `${x.title} — ${x.short}`).join(" ")}`,
     ],
   })),
-  ...allServices
-    .filter((x) => x.hasPage)
-    .map((x): Route => ({
-      path: `/${x.groupSlug}/${x.slug}`,
-      title: `${x.title} — ${company.name}`.slice(0, 60),
-      description: x.short,
-      priority: 0.8,
-      changefreq: "monthly",
-      schema: [
-        serviceSchema(x, x.groupSlug),
-        breadcrumbSchema([
-          { name: x.group, path: `/${x.groupSlug}` },
-          { name: x.title, path: `/${x.groupSlug}/${x.slug}` },
-        ]),
-      ],
-      summary: [x.short, ...(x.body ?? []), ...(x.includes ?? [])],
-    })),
   {
     path: "/service-areas",
     ...seo.serviceAreas,
@@ -148,6 +128,23 @@ const routes: Route[] = [
       `Call ${company.phone}. Email ${company.email}. Address: ${company.address}.`,
       `${company.hours}. Service area: ${serviceAreaTowns.join(", ")}.`,
       ...faqs.map((f) => `${f.q} ${f.a}`),
+    ],
+  },
+  {
+    // Low priority but deliberately indexable: ad reviewers and customers both
+    // have to be able to reach it, and a noindex policy page reads as hiding.
+    path: "/privacy",
+    ...seo.privacy,
+    priority: 0.3,
+    changefreq: "yearly",
+    schema: [breadcrumbSchema([{ name: "Privacy Policy", path: "/privacy" }])],
+    summary: [
+      `Last updated ${privacy.updated}.`,
+      privacy.intro,
+      ...privacy.sections.map(
+        (x) =>
+          `${x.heading}: ${[...x.body, ...(("list" in x && x.list) || [])].join(" ")}`,
+      ),
     ],
   },
 ];
@@ -334,13 +331,7 @@ ${serviceGroups
   .map(
     (g) =>
       `### [${g.title}](${site.url}/${g.slug})\n\n${g.short}\n\n` +
-      g.services
-        .map((x) =>
-          x.hasPage
-            ? `- [${x.title}](${site.url}/${x.groupSlug ?? g.slug}/${x.slug}): ${x.short}`
-            : `- ${x.title}: ${x.short}`,
-        )
-        .join("\n"),
+      g.services.map((x) => `- ${x.title}: ${x.short}`).join("\n"),
   )
   .join("\n\n")}
 
@@ -375,23 +366,6 @@ ${faqs.map((f) => `**${f.q}**\n${f.a}`).join("\n\n")}
 fs.writeFileSync(path.join(DIST, "llms.txt"), llms);
 
 const llmsFull = `${llms}
-## Service detail
-
-${allServices
-  .filter((x) => x.hasPage)
-  .map(
-    (x) => `### ${x.title}
-
-URL: ${site.url}/${x.groupSlug}/${x.slug}
-Category: ${x.group}
-
-${(x.body ?? []).join("\n\n")}
-
-What we handle:
-${(x.includes ?? []).map((i) => `- ${i}`).join("\n")}`,
-  )
-  .join("\n\n")}
-
 ## Structured data
 
 This site publishes schema.org markup as HomeAndConstructionBusiness and

@@ -10,6 +10,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Loader2, PhoneCall, X } from "lucide-react";
 import { allServices, company } from "@/content";
+import { FormConsent } from "./FormConsent";
 import {
   CALLBACK_SLOTS,
   requestCallback,
@@ -173,10 +174,14 @@ function CallbackModal({
               </div>
             ) : (
               <form onSubmit={submit} noValidate className="px-7 pb-8 pt-9">
-                <span className="inline-flex size-12 items-center justify-center rounded-none bg-brand-50 text-brand-600">
-                  <PhoneCall className="size-5" aria-hidden="true" />
-                </span>
-                <h2 id="callback-title" className="mt-5 text-[24px] font-semibold">
+                {/*
+                  No icon above the heading. The modal is already titled by the
+                  button that opened it, so a phone badge restated it a second
+                  time and pushed the first field further down — on a short
+                  phone screen that costs a whole field of visible form.
+                  Right padding clears the close button in the corner.
+                */}
+                <h2 id="callback-title" className="pr-12 text-[24px] font-semibold">
                   Request a call
                 </h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
@@ -313,9 +318,11 @@ function CallbackModal({
                   )}
                 </button>
 
-                <p className="mt-3 text-center text-[12px] text-ink-muted">
-                  We only use this number to call you about the job.
-                </p>
+                <FormConsent
+                  className="mt-3"
+                  note="We only use this number to call you about the job."
+                  action="requesting a call"
+                />
               </form>
             )}
           </motion.div>

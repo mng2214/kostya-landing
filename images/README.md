@@ -1,51 +1,77 @@
 # Source images
 
-Originals as generated. **Nothing here is served to the browser.** The site
-loads the cropped and resized copies in `src/assets/photos/`, plus
-`public/og-cover.jpg` for the social preview.
+**Nothing here is served to the browser.** The site loads `src/assets/photos/`
+plus `public/og-cover.jpg` for the social preview.
 
-Naming: `<slot>__<source WxH>.jpeg`. The size in the name is the size of *this
-file*, not the size it is used at — the build crops each one to the ratio its
-slot needs.
+Only two files remain, because photography is now the client's to supply.
+Every slot on the site ships a "your image here" placeholder instead of a
+generated photo, and the placeholders carry their required pixel size in both
+the filename and the picture, so nobody has to look anything up.
 
-## In use
+| File | Installed as | Why it stays |
+|---|---|---|
+| `why-us-chicago.jpg` | `src/assets/photos/why-us-chicago.jpg` | The skyline behind "Why choose us" — a stock city view, not something the client photographs |
+| `favicon-mark__1024x1024.jpeg` | `public/favicon-32.png`, `favicon-512.png`, `apple-touch-icon.png` | The logo mark, not photography |
 
-| Source file | Installed as | Used at | Where it appears |
-|---|---|---|---|
-| `hero-technician__1088x976.jpeg` | `src/assets/photos/hero-technician.jpg` | 1800×1620 | Home, hero |
-| `why-us-technician__1088x976.jpeg` | `src/assets/photos/why-us-technician.jpg` | 1400×1260 | Home, "Why choose us" |
-| `about-crew__896x1200.jpeg` | `src/assets/photos/about-crew.jpg` | 800×1067 | About block, left |
-| `about-van__896x1200.jpeg` | `src/assets/photos/about-van.jpg` | 800×1067 | About block, right |
-| `service-refrigerator-repair__928x1152.jpeg` | `src/assets/photos/service-refrigerator-repair.jpg` | 1000×1250 | `/appliance-repair/refrigerator-repair` |
-| `service-washer-dryer-repair__928x1152.jpeg` | `src/assets/photos/service-washer-dryer-repair.jpg` | 1000×1250 | `/appliance-repair/washer-dryer-repair` |
-| `service-dishwasher-repair__928x1152.jpeg` | `src/assets/photos/service-dishwasher-repair.jpg` | 1000×1250 | `/appliance-repair/dishwasher-repair` + Appliance panel |
-| `service-oven-stove-repair__928x1152.jpeg` | `src/assets/photos/service-oven-stove-repair.jpg` | 1000×1250 | `/appliance-repair/oven-stove-repair` |
-| `service-air-conditioning-repair__928x1152.jpeg` | `src/assets/photos/service-air-conditioning-repair.jpg` | 1000×1250 | `/hvac-services/air-conditioning-repair` + HVAC panel |
-| `service-heating-furnace-repair__928x1152.jpeg` | `src/assets/photos/service-heating-furnace-repair.jpg` | 1000×1250 | `/hvac-services/heating-furnace-repair` + Installation panel |
-| `service-commercial__928x1152.jpeg` | `src/assets/photos/service-commercial.jpg` | 1000×1250 | Commercial panel on the home selector |
-| `og-cover__1376x768.jpeg` | `public/og-cover.jpg` | 1200×630 | Link preview in social apps and messengers |
-| `favicon-mark__1024x1024.jpeg` | `public/favicon-32.png`, `favicon-512.png`, `apple-touch-icon.png` | 32 / 512 / 180 | Browser tab, bookmarks, phone home screen |
+The favicon source is cropped tight to its frame before resizing — the generated
+image had a wide white margin, and at 32px every wasted pixel of padding costs
+legibility. The white *outside* the frame is made transparent; the white inside
+it is part of the mark. The Apple icon keeps a solid white ground, because iOS
+composites transparency onto black.
 
-## Not used
+## Replacing a placeholder
 
-Kept for reference only. The first three show trades the company does not
-offer — putting them on the site would advertise services that do not exist.
+Every file in `src/assets/photos/` is named `<slot>__<width>x<height>.jpg`.
+**Save the new photo over the existing file, keeping its name**, and it appears
+on the site — `src/lib/photos.ts` strips the `__WxH` suffix and matches on the
+slot, so no code changes.
 
-| File | Why not |
+| File to replace | Where it appears |
 |---|---|
-| `unused__drywall-patching__928x1152.jpeg` | Handyman work — from the previous brand |
-| `unused__electrical-gfci-outlet__928x1152.jpeg` | Electrical — from the previous brand |
-| `unused__plumbing-under-sink__928x1152.jpeg` | Plumbing — from the previous brand |
-| `unused__contact-sheet-grid__1088x976.jpeg` | A grid of thumbnails, not a usable frame |
+| `hero-technician__1800x1620.jpg` | Home, the large photo beside the headline |
+| `help-refrigerator__900x675.jpg` | Home, "What can we help you with?" card 1 |
+| `help-washer-dryer__900x675.jpg` | Home, "What can we help you with?" card 2 |
+| `help-dishwasher__900x675.jpg` | Home, "What can we help you with?" card 3 |
+| `help-oven-range__900x675.jpg` | Home, "What can we help you with?" card 4 |
+| `help-hvac__900x675.jpg` | Home, "What can we help you with?" card 5 |
+| `help-installation__900x675.jpg` | Home, "What can we help you with?" card 6 |
+| `service-refrigerator-repair__1000x1250.jpg` | Home, expanding panel (desktop) — refrigerators |
+| `service-washer-dryer-repair__1000x1250.jpg` | Home, expanding panel (desktop) — washers and dryers |
+| `service-dishwasher-repair__1000x1250.jpg` | Home, expanding panel (desktop) — dishwashers |
+| `service-oven-stove-repair__1000x1250.jpg` | Home, expanding panel (desktop) — ovens and ranges |
+| `service-air-conditioning-repair__1000x1250.jpg` | Home, expanding panel (desktop) — HVAC |
+| `service-heating-furnace-repair__1000x1250.jpg` | Home, expanding panel (desktop) — installation |
+| `about-crew__800x1067.jpg` | About block, left |
+| `about-van__800x1067.jpg` | About block, right |
 
-The favicon source is cropped tight to its frame before resizing — the generated image had a wide white margin, and at 32px every wasted pixel of padding costs legibility. The white *outside* the frame is made transparent; the white inside it is part of the mark. The Apple icon keeps a solid white ground, because iOS composites transparency onto black.
+One image lives outside that folder:
 
-## Adding a new one
+| File to replace | Where it appears |
+|---|---|
+| `public/og-cover.jpg` — 1200 × 630 | The picture shown when the site is shared in Messenger, WhatsApp, Facebook or iMessage |
 
-1. Generate with `scripts/gen-photos.py` (prompts and ratios live there), or by
-   hand using the prompts in `PHOTOS.md`.
-2. Drop the original here with the same naming pattern.
-3. Put the cropped copy in `src/assets/photos/<slot>.jpg` — the filename *is*
-   the wiring, `src/lib/photos.ts` picks it up at build time with no import to
-   add. A slot with no file falls back to a tinted placeholder, so the site is
-   never broken mid-way.
+**Keep that filename exactly.** Unlike the photos above it is not matched by
+slot: the path is written into `index.html` and `content.ts`, and the services
+that render link previews cache it by URL. Until it is replaced, every shared
+link shows "YOUR IMAGE HERE".
+
+The size in the name is what the slot is displayed at. A larger file works and
+is simply scaled down; a smaller one will look soft. Match the **aspect ratio** —
+the image is cropped to fill its box, so a landscape photo dropped into a
+portrait slot loses its sides.
+
+The six `help-*` shots and the six `service-*` shots cover the same six
+categories. They exist twice because the phone carousel wants a landscape
+product shot and the desktop panel wants a tall one; the same photograph
+cropped two ways is fine.
+
+## Regenerating the placeholders
+
+`python3 scripts/gen-placeholders.py` redraws all of them, reading the sizes
+straight out of `PHOTO_SIZES` in `src/lib/photos.ts` so the two cannot drift.
+Pass slot names to redraw only some. `why-us-chicago` is listed in `KEEP_REAL`
+and is never overwritten.
+
+If a slot has no file at all, the site falls back to a tinted panel with the
+service icon rather than breaking — but the placeholder is the better state,
+because it tells the client what is missing.
